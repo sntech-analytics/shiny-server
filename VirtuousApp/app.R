@@ -59,9 +59,6 @@ mainPanel(
 
 server = function(input, output) {
 
-
-
-
 # Leaflet map
 output$map = renderLeaflet({
       maptest <- leaflet(track)
@@ -88,10 +85,7 @@ output$map = renderLeaflet({
  #     maptest <- addPolylines(maptest, lng = ~Lng,
  #                       lat = ~Lat)
       })
-      
-      
-      
-      
+           
 }
 
 shinyApp(ui=ui, server=server)
