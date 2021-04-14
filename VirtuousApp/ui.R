@@ -3,8 +3,8 @@ library(leaflet)  # renderLeaflet function
 library(htmltools)
 
 
-#track <- readRDS(file='track.rds')
-track <- readRDS(file=url('https://www.ecological-analytics.com/Downloads/track.rds'))
+track <- readRDS(file='track.rds')
+#track <- readRDS(file=url('https://www.ecological-analytics.com/Downloads/track.rds'))
 
 #pal <- colorQuantile(
 #  palette = "Reds",
