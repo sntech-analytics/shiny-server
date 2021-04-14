@@ -1,7 +1,7 @@
 library(shiny)    # for shiny apps
 library(leaflet)  # renderLeaflet function
 library(htmltools)
-
+track <- readRDS(file='track.rds')
 server = function(input, output) {
 
 # Leaflet map
