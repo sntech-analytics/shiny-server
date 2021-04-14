@@ -3,7 +3,7 @@ library(leaflet)  # renderLeaflet function
 library(htmltools)
 
 
-track <- readRDS(file='/srv/shiny-server/VirtuousAp/track.rds')
+track <- readRDS(file='/srv/shiny-server/VirtuousApp/track.rds')
 
 #pal <- colorQuantile(
 #  palette = "Reds",
