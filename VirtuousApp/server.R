@@ -30,6 +30,8 @@ output$map = renderLeaflet({
  #     maptest <- addPolylines(maptest, lng = ~Lng,
  #                       lat = ~Lat)
       })
+
+output$viewData <- renderTable(track)
            
 }
 

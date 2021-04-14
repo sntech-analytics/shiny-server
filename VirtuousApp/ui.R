@@ -40,6 +40,10 @@ mainPanel(
  #          tags$h5("2. The symbols colours are scaled to Speed over ground (SOG). Red is faster."), 
                                leafletOutput(outputId = "map", height=600)
                                ),
+                               
+   tabPanel("Track data",
+           tableOutput(outputId="viewData")
+            ),
 
    tabPanel("Catch summary plots",
  #                              uiOutput("Decompdepvarname"),
