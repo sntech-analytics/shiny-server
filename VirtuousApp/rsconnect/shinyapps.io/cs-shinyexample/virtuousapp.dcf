@@ -1,0 +1,10 @@
+name: virtuousapp
+title:
+username:
+account: cs-shinyexample
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3954640
+bundleId: 4465187
+url: https://cs-shinyexample.shinyapps.io/virtuousapp/
+when: 1618312578.76305
