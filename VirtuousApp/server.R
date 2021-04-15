@@ -38,7 +38,8 @@ output$map = renderLeaflet({
 
 output$viewData <- renderTable(track)
 
-output$sumPlot <- renderPlotly({
+#output$sumPlot <- renderPlotly({
+output$sumPlot <- renderPlot({
       a <- ggplot() +
        theme_classic() +
       geom_hline(yintercept=0) +
@@ -51,8 +52,8 @@ output$sumPlot <- renderPlotly({
          strip.text.y = element_text(size=12, face="bold"),
          strip.background = element_blank()) +
      facet_wrap(~Group, scales='free')
-
-     plot_ly(a)
+     a
+#     plot_ly(a)
 
 })
           

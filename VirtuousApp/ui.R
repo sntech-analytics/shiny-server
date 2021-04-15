@@ -48,10 +48,11 @@ mainPanel(
    tabPanel("Catch summary plots",
                          tags$p("Work in progress. The top (positive part greater than zero) is the retained catch, the negative values are returned catch"),
                          tags$p("When we get samples with lights, these will be placed side by side with the non-lighted shots."),
-                         tags$p("This is an interactive graph. You can highlight points, zoom in and zoom out on it."),
+  #                       tags$p("This is an interactive graph. You can highlight points, zoom in and zoom out on it."),
                          tags$p("We only have a handful of samples at the moment, so the boxplot elements are misleading. As we get more, the data points will fill it 
                          out and we will begin to get a better feel of how the sample numbers are capturing the patterns."),
-                               plotlyOutput(outputId="output$sumPlot")
+#                               plotlyOutput(outputId="output$sumPlot")
+                               plotOutput(outputId="output$sumPlot")
                                ),
   tabPanel("Track data",
            tableOutput(outputId="viewData")
