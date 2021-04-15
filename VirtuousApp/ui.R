@@ -1,9 +1,12 @@
 library(shiny)    # for shiny apps
 library(leaflet)  # renderLeaflet function
 library(htmltools)
-
+library(ggplot2)
+library(plotly)
+library(data.table)
 
 track <- readRDS(file='track.rds')
+df <- readRDS(file='CatchApp.rds')
 #track <- readRDS(file=url('https://www.ecological-analytics.com/Downloads/track.rds'))
 
 #pal <- colorQuantile(
@@ -42,15 +45,16 @@ mainPanel(
                                leafletOutput(outputId = "map", height=600)
                                ),
                                
-   tabPanel("Track data",
-           tableOutput(outputId="viewData")
-            ),
-
    tabPanel("Catch summary plots",
- #                              uiOutput("Decompdepvarname"),
- #                              tags$h3("Seasonal decomposition of the time series"),
- #                              textOutput(outputId="decomptest"),
- #                              plotOutput(outputId="DecompPlot")
+                         tags$p("Work in progress. The top (positive part greater than zero) is the retained catch, the negative values are returned catch"),
+                         tags$p("When we get samples with lights, these will be placed side by side with the non-lighted shots."),
+                         tags$p("This is an interactive graph. You can highlight points, zoom in and zoom out on it."),
+                         tags$p("We only have a handful of samples at the moment, so the boxplot elements are misleading. As we get more, the data points will fill it 
+                         out and we will begin to get a better feel of how the sample numbers are capturing the patterns."),
+                               plotlyOutput(outputId="output$sumPlot")
+                               ),
+  tabPanel("Track data",
+           tableOutput(outputId="viewData")
                                )
                       )
 
