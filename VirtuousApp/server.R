@@ -36,26 +36,30 @@ output$map = renderLeaflet({
  #                       lat = ~Lat)
       })
 
-output$viewData <- renderTable(track)
-
-#output$sumPlot <- renderPlotly({
-output$sumPlot <- renderPlot({
-      a <- ggplot() +
+  
+# output$testplot <- renderPlot({
+output$sumPlot <- renderPlotly({
+      a <- ggplot(data = df) +
        theme_classic() +
-      geom_hline(yintercept=0) +
-      geom_boxplot(data = df, aes(x=Species, y=Retained.weight, fill=Bait)) +
-      geom_point(data = df, aes(x=Species, y=Retained.weight), size=2) +
-      geom_boxplot(data = df, aes(x=Species, y=Returned.Weight, fill=Bait)) +
-      geom_point(data = df, aes(x=Species, y=Returned.Weight), color='blue', size=2) +
+        geom_hline(yintercept=0) +
+        geom_boxplot(data = df, aes(x=Species, y=Retained.weight, fill=Bait)) +
+        geom_point(data = df, aes(x=Species, y=Retained.weight), size=1) +
+        geom_boxplot(data = df, aes(x=Species, y=Returned.Weight, fill=Bait)) +
+       geom_point(data = df, aes(x=Species, y=Returned.Weight), color='blue', size=1) +
 #   labs(x ="First EO", y = "Time of Day") +
-     theme(strip.text.x = element_text(size=12, face="bold"),
+       theme(strip.text.x = element_text(size=12, face="bold"),
          strip.text.y = element_text(size=12, face="bold"),
          strip.background = element_blank()) +
-     facet_wrap(~Group, scales='free')
-     a
-#     plot_ly(a)
+      facet_wrap(~Group, scales='free')
+      
+      ggplotly(a)
+      
+   })      
 
-})
+output$viewTrack <- renderTable(track)
+
+output$viewCatch <- renderTable(df)
+
           
 }
 

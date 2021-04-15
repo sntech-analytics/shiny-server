@@ -7,7 +7,6 @@ library(data.table)
 
 track <- readRDS(file='track.rds')
 df <- readRDS(file='CatchApp.rds')
-#track <- readRDS(file=url('https://www.ecological-analytics.com/Downloads/track.rds'))
 
 #pal <- colorQuantile(
 #  palette = "Reds",
@@ -42,22 +41,28 @@ mainPanel(
            tags$h2("MFV Virtuous track", align = "center"),
            tags$h5("1. Hover over the icon to get Speed Over Ground (mph). As we get sample data, we will project the sample locations on the map."), 
  #          tags$h5("2. The symbols colours are scaled to Speed over ground (SOG). Red is faster."), 
-                               leafletOutput(outputId = "map", height=600)
+                               leafletOutput(outputId = "map", height='600px')
                                ),
                                
    tabPanel("Catch summary plots",
-                         tags$p("Work in progress. The top (positive part greater than zero) is the retained catch, the negative values are returned catch"),
+                         tags$p("Work in progress. The top (positive part greater than zero) is the retained catch, the negative values (blue dots) are returned catch"),
                          tags$p("When we get samples with lights, these will be placed side by side with the non-lighted shots."),
-  #                       tags$p("This is an interactive graph. You can highlight points, zoom in and zoom out on it."),
+                         tags$p("This is an interactive graph. You can highlight points, zoom in and zoom out on it."),
                          tags$p("We only have a handful of samples at the moment, so the boxplot elements are misleading. As we get more, the data points will fill it 
                          out and we will begin to get a better feel of how the sample numbers are capturing the patterns."),
-#                               plotlyOutput(outputId="output$sumPlot")
-                               plotOutput(outputId="output$sumPlot")
+                               plotlyOutput(outputId="sumPlot", height = "600px", width="100%")
+
                                ),
-  tabPanel("Track data",
-           tableOutput(outputId="viewData")
-                               )
-                      )
+ 
+   tabPanel("Catch data",
+           tableOutput(outputId="viewCatch")
+            ),
+            
+                               
+   tabPanel("Track data",
+           tableOutput(outputId="viewTrack")
+            )                               
+      )
 
 
 
