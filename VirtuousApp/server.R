@@ -43,11 +43,12 @@ output$sumPlot <- renderPlotly({
        theme_classic() +
         geom_hline(yintercept=0) +
         scale_color_manual(values = c('black', 'blue')) +
+   #     labs(fill="Pisces status") +
         geom_violin(data = df, aes(x=Species, y=Retained.weight, fill=Bait)) +
         geom_violin(data = df, aes(x=Species, y=Returned.Weight, fill=Bait)) +
         
         geom_point(data = df, aes(x=Species, y=Retained.weight, group=Bait, color=Bait), position = position_dodge(1)) +
-        geom_point(data = df, aes(x=Species, y=Returned.Weight, group=Bait), color=Bait, position = position_dodge(1)) +       
+        geom_point(data = df, aes(x=Species, y=Returned.Weight, group=Bait, color=Bait), position = position_dodge(1)) +       
 #        geom_boxplot(data = df, aes(x=Species, y=Retained.weight, fill=Bait)) +
 #        geom_point(data = df, aes(x=Species, y=Retained.weight), size=1) +
 #        geom_boxplot(data = df, aes(x=Species, y=Returned.Weight, fill=Bait)) +
