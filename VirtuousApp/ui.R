@@ -45,10 +45,10 @@ mainPanel(
                                ),
                                
    tabPanel("Catch summary plots",
-                         tags$p("Work in progress. The top (positive part greater than zero) is the retained catch, the negative values (blue dots) are returned catch"),
-                         tags$p("When we get samples with lights, these will be placed side by side with the non-lighted shots."),
+                         tags$p("Work in progress. The top (positive part greater than zero) is the retained catch, the negative values are returned catch"),
+                         tags$p("The non-light and Pisces lighted treatments are side by side. These are violin (cf boxplot) plots."),
                          tags$p("This is an interactive graph. You can highlight points, zoom in and zoom out on it."),
-                         tags$p("We only have a handful of samples at the moment, so the boxplot elements are misleading. As we get more, the data points will fill it 
+                         tags$p("We only have a handful of samples at the moment. As we get more, the data points will fill it 
                          out and we will begin to get a better feel of how the sample numbers are capturing the patterns."),
                                plotlyOutput(outputId="sumPlot", height = "600px", width="100%")
 
