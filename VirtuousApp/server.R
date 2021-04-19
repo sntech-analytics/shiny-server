@@ -42,7 +42,7 @@ output$sumPlot <- renderPlotly({
       a <- ggplot(data = df) +
        theme_classic() +
         geom_hline(yintercept=0) +
-        scale_color_manual(values = c('black', 'blue')) +
+        scale_color_manual(values = c('black', 'blue', 'green')) +
    #     labs(fill="Pisces status") +
         geom_violin(data = df, aes(x=Species, y=Retained.weight, fill=Bait)) +
         geom_violin(data = df, aes(x=Species, y=Returned.Weight, fill=Bait)) +
