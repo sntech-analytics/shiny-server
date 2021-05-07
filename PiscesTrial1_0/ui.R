@@ -64,7 +64,7 @@ sidebarPanel(
 
       selectInput(inputId = "species",
                   label = "Select species to plot",
-                  choices =  c('Nephrops', 'Nephrops tails', 'Haddock', 'Whiting', 'Cod',  'Monkfish/Anglers', 'Plaice', 'Witch'),
+                  choices =  c('Nephrops', 'Haddock', 'Whiting', 'Cod',  'Monkfish/Anglers', 'Plaice', 'Witch'),
                   multiple=FALSE,
                   selected = c('Nephrops')
       ) 
