@@ -46,7 +46,7 @@ ggcum <- ggplot(data = countDF,
   ylab("Cumulative number of hauls") +
   xlab("") +
    theme(plot.title = element_text(size=14, face="bold", hjust=0.5)) +
-   theme(axis.text = element_text(size=12, face="bold"),
+   theme(axis.text = element_text(size=10),
          axis.title = element_text(size=14, face="bold")) +
    theme(strip.text.x = element_text(size=12, face="bold"),
          strip.text.y = element_text(size=12, face="bold"),
@@ -70,7 +70,7 @@ server <- function(input, output) {
             x <- body_add(x, 'Overview', style = "Heading")            
             x <- body_add(x, input$intro, style = "Body Text")
             x <- body_add(x, "", style = "Body Text")
-            x <- body_add_gg(x, ggcum, width = 5, height = 4, res = 300, style = "Body Text")
+            x <- body_add_gg(x, ggcum, width = 6, height = 6, res = 300, style = "Body Text")
             x <- body_add(x, 'Crosstabulation', style="Table Heading")
             x <- body_add_table(x, wkcountDF)
 #            x <- body_add(x, tablehead, style = "Table Heading")
