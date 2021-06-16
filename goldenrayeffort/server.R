@@ -1,18 +1,3 @@
-library(shiny)    # for shiny apps
-library(leaflet)  # renderLeaflet function
-library(htmltools)
-library(suncalc)
-library(shinycssloaders)
-library(lubridate)
-library(ggplot2)
-library(plotly)
-library(data.table)
-library(RMariaDB)
-library(config)
-library(pool)
-library(magrittr)
-
-
 server <- function(input, output) {
     
 db_config <- config::get("dataconnection")
@@ -26,7 +11,7 @@ con <- dbPool(
 
 #THIS IS IMPORTANT!!
 #Config has its own merge() which conflicts with base R
-detach(package:config)
+detach('package:config')
 
 # As a safeguard against SQL injection, all queries will be through R base or data.table 
 id <- dbGetQuery(con, 'SELECT * FROM trialID')
@@ -34,15 +19,14 @@ catch <- dbGetQuery(con, 'SELECT * FROM catchData')
 towtrack <- dbGetQuery(con, 'SELECT * FROM towTrackData') 
 dfeffort <- dbGetQuery(con, 'SELECT * FROM effortData') 
 catch$Species[catch$Species=='Monks of Anglers'] <- 'Monkfish/Anglers'
-
+dfcatch <- merge(catch, id)
     
-track2 <- subset(track, Asset=='GoldenRay')
 greffort <- subset(dfeffort, Asset=='GoldenRay')
 towtrack2 <- subset(towtrack, Asset=='GoldenRay')
 towtrack2 <- merge(greffort, towtrack2)
 towtrack2 <- towtrack2[c("Asset", "SampleID", "StartDate", "Date", "Latitude", "Longitude")]
 
-dfnephrops <- subset(dfcatch, dfcatch$Species %in% c('Nephrops', 'Nephrops Tails') & Asset=='GoldenRay')
+dfnephrops <- subset(dfcatch, dfcatch$Species %in% c('Nephrops', 'Nephrops Tails') & dfcatch$Asset=='GoldenRay')
 dfnephrops <- aggregate(RetainedWeight ~ Asset + SampleID, sum, data=dfnephrops)
 dfnephrops <- merge(dfnephrops, dfeffort)
 dfnephrops$NephropsCPUE <- dfnephrops$RetainedWeight/dfnephrops$TowTimeHours
