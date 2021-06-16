@@ -1,0 +1,7 @@
+default:
+    dataconnection:
+        dbname: 'piscestrial'
+        host: 'localhost'
+        username: 'shiny'
+        password: 'Pjc_S$9rB@'
+
