@@ -26,7 +26,7 @@ con <- dbPool(
 
 #THIS IS IMPORTANT!!
 #Config has its own merge() which conflicts with base R
-#detach('package:config')
+detach(package:config)
 
 # As a safeguard against SQL injection, all queries will be through R base or data.table 
 id <- dbGetQuery(con, 'SELECT * FROM trialID')
