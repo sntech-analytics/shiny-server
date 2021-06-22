@@ -1,6 +1,7 @@
 
 server <- function(input, output) {
-    
+
+library(config)    
 db_config <- config::get("dataconnection")
 con <- dbPool(
   drv = MariaDB(),
