@@ -22,7 +22,7 @@ catch <- dbGetQuery(con, 'SELECT * FROM catchData')
 towtrack <- dbGetQuery(con, 'SELECT * FROM towTrackData') 
 dfeffort <- dbGetQuery(con, 'SELECT * FROM effortData') 
 catch$Species[catch$Species=='Monks of Anglers'] <- 'Monkfish/Anglers'
-dfcatch <- merge(catch, id)
+dfcatch <- merge(catch, id, by='SampleID')
     
 greffort <- subset(dfeffort, Asset=='GoldenRay')
 towtrack2 <- subset(towtrack, Asset=='GoldenRay')
