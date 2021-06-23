@@ -86,31 +86,31 @@ ui <- shinyUI(navbarPage("Draft boat dashboard: Golden Ray",
           )
           ),
 
-    tabPanel("Interactive fish length plot",
-          sidebarPanel(
-          tags$img(src="safetynet_logo.png",
-  #       img(src="safetynet_logo.png",
-          title="SafetyNet Technologies",
-          width="230",
-          height="70"),
-          tags$h3("Select species"),
-          tags$p("This is the plotly() interactive version of previous page."),
+#    tabPanel("Interactive fish length plot",
+#          sidebarPanel(
+#          tags$img(src="safetynet_logo.png",
+#  #       img(src="safetynet_logo.png",
+#          title="SafetyNet Technologies",
+#          width="230",
+#          height="70"),
+#          tags$h3("Select species"),
+#          tags$p("This is the plotly() interactive version of previous page."),
 
-          tags$br(),
-          tags$br(),
-          selectInput("splength", "Species:",
-            c("Haddock" = "Haddock",
-              "Whiting" = "Whiting"),
-             selected='Haddock'),
-          tags$br(),
-          tags$br(),
-         ),
+#          tags$br(),
+#          tags$br(),
+#          selectInput("splength", "Species:",
+#            c("Haddock" = "Haddock",
+#              "Whiting" = "Whiting"),
+#             selected='Haddock'),
+#          tags$br(),
+#          tags$br(),
+#         ),
              
-          mainPanel(tags$h1("Fish length frequencies with and without light", align = "center"),
-          shinycssloaders::withSpinner(
-          plotlyOutput(outputId = "lengthplotly", height='600px'))                
-          )
-          ),
+#          mainPanel(tags$h1("Fish length frequencies with and without light", align = "center"),
+#          shinycssloaders::withSpinner(
+#          plotlyOutput(outputId = "lengthplotly", height='600px'))                
+#          )
+#          ),
    
  
                        
@@ -145,5 +145,4 @@ ui <- shinyUI(navbarPage("Draft boat dashboard: Golden Ray",
  )
 )
 )
-                      
- 
+          

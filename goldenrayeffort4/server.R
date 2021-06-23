@@ -1,4 +1,3 @@
-              
 server <- function(input, output) {
     
 library(config)
@@ -151,23 +150,23 @@ output$lengthplot<-renderPlot({
 })   
     
     
-output$lengthplotly<-renderPlotly({  
-    datasub <- subset(grlength, grlength$Species %in% c(input$splength))
-    ggplotly(ggplot(data=datasub, aes(x = Length, group=Colour)) +
-   theme_classic() +
-   ggtitle(input$splength) +
-    geom_histogram(fill='grey', binwidth=1) +
-   geom_density(aes(y=..count..)) +
+#output$lengthplotly<-renderPlotly({  
+#    datasub <- subset(grlength, grlength$Species %in% c(input$splength))
+#    ggplotly(ggplot(data=subset(grlength, grlength$Species %in% c(input$splength)), aes(x = Length, group=Colour)) +
+#   theme_classic() +
+#   ggtitle(input$splength) +
+#    geom_histogram(fill='grey', binwidth=1) +
+#   geom_density(aes(y=..count..)) +
 #   ylab("Count") +
-   theme(legend.position = 'none') +
-   theme(plot.title = element_text(size=20, face="bold", hjust=0.5)) +
-   theme(axis.text = element_text(size=12, face="bold"),
-         axis.title = element_text(size=14, face="bold")) +
-   theme(strip.text.x = element_text(size=14, face="bold"),
-         strip.text.y = element_text(size=12, face="bold"),
-         strip.background = element_blank()) +
-   facet_wrap(~Colour, ncol=1, scales="free"))
-})   
+#   theme(legend.position = 'none') +
+#   theme(plot.title = element_text(size=20, face="bold", hjust=0.5)) +
+#   theme(axis.text = element_text(size=12, face="bold"),
+#         axis.title = element_text(size=14, face="bold")) +
+#   theme(strip.text.x = element_text(size=14, face="bold"),
+#         strip.text.y = element_text(size=12, face="bold"),
+#         strip.background = element_blank()) +
+#   facet_wrap(~Colour, ncol=1, scales="free"))
+#})   
    
                     
 output$map <- renderLeaflet({
