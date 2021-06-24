@@ -42,6 +42,9 @@ dfnephrops <- dfnephrops[c("Asset", "SampleID", "StartDateDT", "NephropsCPUE", "
 combdat <- merge(towtrack2, dfnephrops, by=c("Asset", "SampleID"))
 combdat <- combdat[order(combdat$Date),] 
     
+#For the Nephrops violin plots
+nephropscatch <- merge(dfnephrops, lightid, by='SampleID')
+    
 #Tides
 tideData <- readRDS(file='tideData.RDS')
 DTEffort = melt(as.data.table(greffort), id.vars = c("Asset", "SampleID"),
@@ -124,7 +127,7 @@ output$plot2<-renderPlotly({
     theme_classic() +
     labs(x = "", 
          y = "CPUE (kg/hour)") +
-    geom_line(data=DTEffort, aes(x=DateTime, y=NephropsCPUE, group=SampleID), size=2) +
+    geom_line(data=DTEffort, aes(x=DateTime, y=NephropsCPUE, group=SampleID), size=2, color=pal(DTEffort$NephropsCPUE)) +
     geom_line(data=tideData, aes(x=Date, y=20*Tide + multfact)) +
     scale_x_datetime(limits = c(minx, maxx))  
              )
@@ -167,8 +170,23 @@ output$lengthplot<-renderPlot({
 #         strip.background = element_blank()) +
 #   facet_wrap(~Colour, ncol=1, scales="free"))
 #})   
-   
-                    
+
+output$sumPlot <- renderPlotly({    
+    ggplotly(ggplot(data = nephropscatch) +
+       theme_classic() +
+#        scale_color_manual(values = c('black', 'blue', 'green')) +
+        labs(y="Nephrops CPUE (kg/hour)", x="") +
+        ggtitle("Nephrops catch") +
+        geom_violin(data = nephropscatch, aes(x=Colour, y=NephropsCPUE)) +       
+        geom_point(data = nephropscatch, aes(x=Colour, y=NephropsCPUE), position = position_dodge(1)) +
+        theme(plot.title = element_text(face='bold', size = 18, hjust=0.5),
+              axis.title.y = element_text(face='bold', size = 14),
+              axis.title.x = element_blank(),
+              axis.text.y = element_text(size = 12),
+              axis.text.x = element_text(face='bold', size = 14)))
+        })
+
+    
 output$map <- renderLeaflet({
 #    maptow <- reactive({
 #    subset(combdat, Date >= as.Date(input$dateRange[1]) & Date <= as.Date(input$dateRange[2]))
@@ -217,4 +235,5 @@ observeEvent(input$newdates, {
     
     
  }
+
 
