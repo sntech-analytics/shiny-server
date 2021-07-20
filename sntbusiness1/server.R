@@ -1,4 +1,18 @@
-
+library(httr)
+library(hubspot)
+library(keyring)
+library(lubridate)
+library(ggplot2)
+library(shiny)
+library(leaflet)
+library(htmltools)
+library(shinycssloaders)
+library(lubridate)
+library(ggplot2)
+library(ggpubr)
+library(plotly)
+library(data.table)
+library(scales)
 
 
 server <- function(input, output) {
@@ -20,7 +34,7 @@ library(data.table)
 library(scales)
 
 
-source("www/credentials.R")
+source("credentials.R")
 
 
 deal_props <- hs_deal_properties_tidy()
