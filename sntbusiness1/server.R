@@ -22,7 +22,7 @@ library(hubspot)
 library(keyring)
 
 
-source("credentials.R")
+source("www/credentials.R")
 
 
 deal_props <- hs_deal_properties_tidy()
