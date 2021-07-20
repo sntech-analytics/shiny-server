@@ -1,3 +1,8 @@
+
+
+
+server <- function(input, output) {
+
 library(httr)
 library(hubspot)
 library(keyring)
@@ -13,13 +18,6 @@ library(ggpubr)
 library(plotly)
 library(data.table)
 library(scales)
-
-
-
-server <- function(input, output) {
-library(httr)
-library(hubspot)
-library(keyring)
 
 
 source("www/credentials.R")
