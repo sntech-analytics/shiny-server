@@ -36,7 +36,6 @@ library(scales)
 #hubspot_key_set()
 source("credentials.R")
 
-
 deal_props <- hs_deal_properties_tidy()
 
 deals <- hs_deals_raw(properties = deal_props, max_iter = 1)
