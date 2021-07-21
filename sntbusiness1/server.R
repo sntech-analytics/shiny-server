@@ -33,6 +33,8 @@ library(plotly)
 library(data.table)
 library(scales)
 
+
+keyring_create()
 #hubspot_key_set()
 source("credentials.R")
 
