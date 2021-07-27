@@ -69,6 +69,37 @@ ui <- shinyUI(navbarPage("SafetyNet Tech Developmental business dashboard",
           plotlyOutput(outputId="stackSalesLY"))                              
           )
           ),
+ 
+     tabPanel("Sales, with cumulative values",
+#          sidebarPanel(
+ #         tags$img(src="safetynet_logo.png",
+  #        title="SafetyNet Technologies",
+#          width="230",
+#          height="70"),
+#             tags$h2("Graphical displays and cute stuff", align = "center"),
+#             tags$p("This page provides graphical and summary displays of sales information."),
+#             tags$br(),
+#             tags$p("Here we can also add features to subset and zoom in on elements of the data, as required. But currently this is 
+#             just a static page, based on the latest Hubspot information")
+#                     ),
+                              
+          mainPanel(
+            tags$img(src="safetynet_logo.png",
+            title="SafetyNet Technologies",
+            width="230",
+            height="70"),
+#          shinycssloaders::withSpinner(
+#          tableOutput(outputId="viewSales")),  
+
+#          shinycssloaders::withSpinner(
+#          plotOutput(outputId="stackSales")), 
+
+          shinycssloaders::withSpinner(
+          plotlyOutput(outputId="stackSalesCumLY"))                              
+          )
+          ),
+ 
+ 
           
     tabPanel("Timelines",
 #          sidebarPanel(

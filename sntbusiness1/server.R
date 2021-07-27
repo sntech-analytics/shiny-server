@@ -15,6 +15,14 @@ library(scales)
 
 dealsubwon <- readRDS("dealsubwon.RDS")
 
+          
+sumstat <- aggregate(round(amount, 0) ~ SaleDate, sum, data=dealsubwon)
+names(sumstat) <- c('Date', 'Amount')   
+sumstat$Date <- as.Date(sumstat$Date)  
+sumstat <- sumstat[order(sumstat$Date),]
+sumstat$Cumamount <- cumsum(sumstat$Amount)
+
+
 output$viewPipeline <- renderDT({
                        datatable(dealsubwon, rownames=F)
                        })
@@ -26,11 +34,12 @@ output$stackSales <- renderPlot({
      labs(fill='Deal name') +
      ylab("Amount (GBP)") +
      xlab("Sale date") +
-    scale_x_date(date_breaks = "month",
-     labels = label_date_short()) +
-    geom_bar(position="stack", stat="identity") +
-    theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
-          axis.title = element_text(face="bold", size=12))
+     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+     scale_x_date(date_breaks = "month",
+       labels = label_date_short()) +
+     geom_bar(position="stack", stat="identity") +
+     theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
+           axis.title = element_text(face="bold", size=12))
     })
     
 output$stackSalesLY <- renderPlotly({ 
@@ -41,15 +50,37 @@ output$stackSalesLY <- renderPlotly({
      labs(fill='Deal name') +
      ylab("Amount (GBP)") +
      xlab("Sale date") +
-    scale_x_date(date_breaks = "month",
-     labels = label_date_short()) +
-    geom_bar(position="stack", stat="identity") +
-    theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
-          axis.title = element_text(face="bold", size=12))
+     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+     scale_x_date(date_breaks = "month",
+      labels = label_date_short()) +
+      geom_bar(position="stack", stat="identity") +
+      theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
+           axis.title = element_text(face="bold", size=12))
     
     ggplotly(a, height=650)
     })
     
+output$stackSalesCumLY <- renderPlotly({ 
+
+    a <-  ggplot(data=dealsubwon, aes(y=amount, x=SaleDate, fill=dealname)) +
+    theme_classic() +
+    ggtitle("Sales") +
+     labs(fill='Deal name') +
+     ylab("Amount (GBP)") +
+     xlab("Sale date") +
+     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+     scale_x_date(date_breaks = "month",
+      labels = label_date_short()) +
+      geom_bar(position="stack", stat="identity") +
+      geom_line(data=sumstat, aes(x=Date, y=Cumamount), inherit.aes = FALSE) +
+      theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
+           axis.title = element_text(face="bold", size=12))
+    
+    ggplotly(a, height=650)
+    })
+     
+ 
+ 
     
 output$GanttLY <- renderPlotly({  
 
