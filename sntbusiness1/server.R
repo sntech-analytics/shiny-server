@@ -26,9 +26,7 @@ output$stackSales <- renderPlot({
      labs(fill='Deal name') +
      ylab("Amount (GBP)") +
      xlab("Sale date") +
-#    scale_x_datetime(labels = date_format("%B"),
-#                     date_breaks = "1 month") +
-    scale_x_datetime(date_breaks = "month",
+    scale_x_date(date_breaks = "month",
      labels = label_date_short()) +
     geom_bar(position="stack", stat="identity") +
     theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
@@ -43,9 +41,7 @@ output$stackSalesLY <- renderPlotly({
      labs(fill='Deal name') +
      ylab("Amount (GBP)") +
      xlab("Sale date") +
-#    scale_x_datetime(labels = date_format("%B"),
-#                     date_breaks = "1 month") +
-    scale_x_datetime(date_breaks = "month",
+    scale_x_date(date_breaks = "month",
      labels = label_date_short()) +
     geom_bar(position="stack", stat="identity") +
     theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
@@ -62,7 +58,9 @@ output$GanttLY <- renderPlotly({
                          color = dealname)) +  
     theme_classic() +
     ggtitle("Project timelines") +
-    geom_segment(size=8) +
+    geom_segment(size=6) +
+    scale_x_date(date_breaks = "month",
+     labels = label_date_short()) +
     theme(legend.position = "none",
           plot.title = element_text(face="bold", size=16, hjust=0.5),
           axis.title = element_blank())
