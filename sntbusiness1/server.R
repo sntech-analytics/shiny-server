@@ -13,7 +13,7 @@ library(plotly)
 library(data.table)
 library(scales)
 
-dealsubwon <- readRDS("./dealsubwon.RDS")
+dealsubwon <- readRDS("dealsubwon.RDS")
 
 output$viewPipeline <- renderDT({
                        datatable(dealsubwon, rownames=F)
