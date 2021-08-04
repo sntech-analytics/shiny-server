@@ -1,5 +1,6 @@
 library(ggplot2)
 library(plotly)
+library(scales)
 library(shinydashboard)
 library(shinyWidgets)
 
