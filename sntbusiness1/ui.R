@@ -23,20 +23,25 @@ sidebar <-   dashboardSidebar(
 
 
 body <-   dashboardBody(
+    fluidRow(
       tabItems(
          tabItem(tabName = "saleswon",
-            dataTableOutput(outputId="viewPipeline")
+            shinycssloaders::withSpinner(
+              dataTableOutput(outputId="viewPipeline"))
             ),
 
          tabItem(tabName = "graphs",
-            plotlyOutput(outputId="stackSalesCumLY")
+            shinycssloaders::withSpinner(
+              plotlyOutput(outputId="stackSalesCumLY"))
         ),
     
          tabItem(tabName = "timeline",
-           plotlyOutput(outputId="GanttLY")
+           shinycssloaders::withSpinner(
+             plotlyOutput(outputId="GanttLY"))
          )
-     )
- )
+      )
+   )
+)
 
 ui <- dashboardPage(
   dashboardHeader(title = "SafetyNet Tech Developmental business dashboard"),
