@@ -9,7 +9,96 @@ library(plotly)
 library(data.table)
 library(scales)
 library(DT)
+library(shinydashboard)
 
+
+
+sidebar <-   dashboardSidebar(
+        sidebarMenu(
+           menuItem("Spreadsheet", tabName = "saleswon", icon = icon("dashboard")),
+           menuItem("Graphs", tabName = "graphs", icon = icon("th")),
+           menuItem("Timeline", tabName = "timeline", icon = icon("th"))
+        )
+    )
+
+
+body <-   dashboardBody(
+      tabItems(
+         tabItem(tabName = "saleswon",
+            h2("Spreadsheet content")
+            ),
+
+         tabItem(tabName = "graphs",
+            h2("Graph content")
+        ),
+    
+         tabItem(tabName = "timeline",
+           h2("Timeline content")
+         )
+     )
+ )
+
+ui <- dashboardPage(
+  dashboardHeader(title = "SafetyNet Tech Developmental business dashboard"),
+  sidebar,
+  body
+)
+
+
+server <- function(input, output) {
+}
+
+shinyApp(ui=ui, server=server)
+
+
+
+ui <- dashboardPage(
+  dashboardHeader(title = "SafetyNet Tech Developmental business dashboard"),
+  dashboardSidebar(
+        sidebarMenu(
+           menuItem("Spreadsheet", tabName = "saleswon", icon = icon("dashboard")),
+           menuItem("Graphs", tabName = "graphs", icon = icon("th")),
+           menuItem("Timeline", tabName = "timeline", icon = icon("th"))
+        )
+     ),
+
+  dashboardBody(
+      tabItems(
+
+      # First tab content
+         tabItem(tabName = "saleswon",
+            fluidRow(
+             shinycssloaders::withSpinner(
+             dataTableOutput(outputId="viewPipeline"))
+            )
+          ),
+
+      # Second tab content
+        tabItem(tabName = "graphs",
+           fluidRow(
+            shinycssloaders::withSpinner(
+            plotlyOutput(outputId="stackSalesCumLY"))
+           )
+        ),
+    
+        tabItem(tabName = "timeline",
+           fluidRow(
+           shinycssloaders::withSpinner(
+           plotlyOutput(outputId="stackSalesCumLY"))
+         )
+       )
+   )
+)
+
+
+  
+  
+  )
+ )
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ui <- shinyUI(navbarPage("SafetyNet Tech Developmental business dashboard",
                                              
     tabPanel("Pipeline overview",
