@@ -14,11 +14,12 @@ library(shinydashboard)
 
 
 sidebar <-   dashboardSidebar(
+
+        sidebarMenu(
           tags$img(src="safetynet_logo.png",
           title="SafetyNet Technologies",
           width="230",
           height="70"),
-        sidebarMenu(
            menuItem("Spreadsheet", tabName = "saleswon", icon = icon("dashboard")),
            menuItem("Graphs", tabName = "graphs", icon = icon("th")),
            menuItem("Timeline", tabName = "timeline", icon = icon("th"))
