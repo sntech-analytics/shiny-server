@@ -24,7 +24,7 @@ sumstat$Cumamount <- cumsum(sumstat$Amount)
 
 
 output$viewPipeline <- renderDT({
-                       datatable(dealsubwon, rownames=F)
+                       datatable(dealsubwon, rownames=F, options = list(scrollX = TRUE))
                        })
 
 output$stackSales <- renderPlot({ 
