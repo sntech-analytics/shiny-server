@@ -16,7 +16,7 @@ library(shinydashboard)
 sidebar <-   dashboardSidebar(
 
         sidebarMenu(
-          tags$img(src="safetynet_logo.png",
+          tags$img(src="safetynet_logoWB.png",
           title="SafetyNet Technologies",
           width="230",
           height="70"),
