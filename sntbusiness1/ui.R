@@ -14,15 +14,18 @@ library(shinydashboard)
 
 
 sidebar <-   dashboardSidebar(
-
-        sidebarMenu(
           tags$img(src="safetynet_logoWB.png",
           title="SafetyNet Technologies",
           width="230",
           height="70"),
-           menuItem("Spreadsheet", tabName = "saleswon", icon = icon("dashboard")),
-           menuItem("Graphs", tabName = "graphs", icon = icon("th")),
-           menuItem("Timeline", tabName = "timeline", icon = icon("th"))
+        sidebarMenu(
+           menuItem("Sales won", tabName = "saleswon", icon = icon("dashboard")),
+           menuItem("Sales in pipeline", tabName = "salespipe", icon = icon("dashboard")),
+           menuItem("Unsuccessful sales", tabName = "saleslost", icon = icon("dashboard")),
+           menuItem("Sales graphs", tabName = "wongraphs", icon = icon("th")),
+           menuItem("Pipeline graphs", tabName = "pipegraphs", icon = icon("th")),
+           menuItem("Close, but no cigar graphs", tabName = "lostgraphs", icon = icon("th")),
+           menuItem("Project timelines", tabName = "timeline", icon = icon("th"))
         )
     )
 
@@ -31,16 +34,46 @@ body <-   dashboardBody(
     fluidRow(
       tabItems(
          tabItem(tabName = "saleswon",
+            h2("Successful sales"),
             shinycssloaders::withSpinner(
-              dataTableOutput(outputId="viewPipeline"))
+              dataTableOutput(outputId="wonPipeline"))
             ),
 
-         tabItem(tabName = "graphs",
+         tabItem(tabName = "salespipe",
+            h2("In pipeline"),
+            shinycssloaders::withSpinner(
+              dataTableOutput(outputId="inPipeline"))
+            ),
+
+         tabItem(tabName = "saleslost",
+            h2("Unsuccessful bids"),
+            shinycssloaders::withSpinner(
+              dataTableOutput(outputId="lostPipeline"))
+            ),
+
+         tabItem(tabName = "wongraphs",
+            shinycssloaders::withSpinner(
+              plotlyOutput(outputId="stackSalesLY")),
             shinycssloaders::withSpinner(
               plotlyOutput(outputId="stackSalesCumLY"))
         ),
-    
+
+         tabItem(tabName = "pipegraphs",
+            shinycssloaders::withSpinner(
+              plotlyOutput(outputId="stackPipeLY")),
+            shinycssloaders::withSpinner(
+              plotlyOutput(outputId="stackPipeCumLY"))
+        ),
+
+         tabItem(tabName = "lostgraphs",
+            shinycssloaders::withSpinner(
+              plotlyOutput(outputId="stackLostLY")),
+            shinycssloaders::withSpinner(
+              plotlyOutput(outputId="stackLostCumLY"))
+        ),
+            
          tabItem(tabName = "timeline",
+           h2("Project timelines"),
            shinycssloaders::withSpinner(
              plotlyOutput(outputId="GanttLY"))
          )

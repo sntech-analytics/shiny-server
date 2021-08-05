@@ -13,82 +13,76 @@ library(plotly)
 library(data.table)
 library(scales)
 
-dealsubwon <- readRDS("dealsubwon.RDS")
+dealsub <- readRDS("dealsub.RDS")
+dealsubwon <- subset(dealsub, dealsub$WinLoseStatus == "Won")
+dealsubpipe <- subset(dealsub, dealsub$WinLoseStatus == "Pipeline")
+dealsublost <- subset(dealsub, dealsub$WinLoseStatus == "Lost")
 
-          
-sumstat <- aggregate(round(amount, 0) ~ SaleDate, sum, data=dealsubwon)
-names(sumstat) <- c('Date', 'Amount')   
-sumstat$Date <- as.Date(sumstat$Date)  
+source("functions.R")
+
+# Aggregate to month, and sort for cumulative sums         
+sumstat <- aggregate(round(amount, 0) ~ Date + WinLoseStatus, sum, data=dealsub)
+names(sumstat) <- c('Date', 'WinLoseStatus', 'Amount') 
 sumstat <- sumstat[order(sumstat$Date),]
-sumstat$Cumamount <- cumsum(sumstat$Amount)
 
+#Cumulative sums for each catagory
+sumstatwon <- subset(sumstat, sumstat$WinLoseStatus == "Won")
+sumstatwon$Cumamount <- cumsum(sumstatwon$Amount)
 
-output$viewPipeline <- renderDT({
+sumstatpipe <- subset(sumstat, sumstat$WinLoseStatus == "Pipeline")
+sumstatpipe$Cumamount <- cumsum(sumstatpipe$Amount)
+
+sumstatlost <- subset(sumstat, sumstat$WinLoseStatus == "Lost")
+sumstatlost$Cumamount <- cumsum(sumstatlost$Amount)
+
+# Output the spreadsheets
+output$wonPipeline <- renderDT({
                        datatable(dealsubwon, rownames=F, options = list(scrollX = TRUE))
                        })
 
-output$stackSales <- renderPlot({ 
-    ggplot(data=dealsubwon, aes(y=amount, x=SaleDate, fill=dealname)) +
-    theme_classic() +
-    ggtitle("Sales") +
-     labs(fill='Deal name') +
-     ylab("Amount (GBP)") +
-     xlab("Sale date") +
-     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
-     scale_x_date(date_breaks = "month",
-       labels = label_date_short()) +
-     geom_bar(position="stack", stat="identity") +
-     theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
-           axis.title = element_text(face="bold", size=12))
-    })
-    
+output$inPipeline <- renderDT({
+                       datatable(dealsubpipe, rownames=F, options = list(scrollX = TRUE))
+                       })
+
+output$lostPipeline <- renderDT({
+                       datatable(dealsublost, rownames=F, options = list(scrollX = TRUE))
+                       })
+
+
+# Simple stacked plots    
 output$stackSalesLY <- renderPlotly({ 
-
-    a <- ggplot(data=dealsubwon, aes(y=amount, x=SaleDate, fill=dealname)) +
-    theme_classic() +
-    ggtitle("Sales") +
-     labs(fill='Deal name') +
-     ylab("Amount (GBP)") +
-     xlab("Sale date") +
-     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
-     scale_x_date(date_breaks = "month",
-      labels = label_date_short()) +
-      geom_bar(position="stack", stat="identity") +
-      theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
-           axis.title = element_text(face="bold", size=12))
-    
-    ggplotly(a, height=650)
+    poundmonth(dealsubwon, "Date", "Sales", 650)
     })
     
+output$stackPipeLY <- renderPlotly({ 
+    poundmonth(dealsubpipe, "Date", "Sales", 650)
+    })
+    
+output$stackLostLY <- renderPlotly({ 
+    poundmonth(dealsublost, "Date", "Sales", 650)
+    })     
+
+# Overlay the cumulative values
 output$stackSalesCumLY <- renderPlotly({ 
-
-    a <-  ggplot(data=dealsubwon, aes(y=amount, x=SaleDate, fill=dealname)) +
-    theme_classic() +
-    ggtitle("Sales") +
-     labs(fill='Deal name') +
-     ylab("Amount (GBP)") +
-     xlab("Sale date") +
-     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
-     scale_x_date(date_breaks = "month",
-      labels = label_date_short()) +
-      geom_bar(position="stack", stat="identity") +
-      geom_line(data=sumstat, aes(x=Date, y=Cumamount), inherit.aes = FALSE) +
-      theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
-           axis.title = element_text(face="bold", size=12))
-    
-    ggplotly(a, height=650)
+    cumpoundmonth(dealsubwon, sumstatwon, "Date", "Sales", 650)
     })
+ 
+output$stackPipeCumLY <- renderPlotly({ 
+    cumpoundmonth(dealsubpipe, sumstatpipe, "Date", "Pipleline", 650)
+    })
+ 
+output$stackLostCumLY <- renderPlotly({ 
+    cumpoundmonth(dealsublost, sumstatlost, "Date", "Lost", 650)
+    })
+ 
      
- 
- 
-    
 output$GanttLY <- renderPlotly({  
 
      b <- ggplot(data=dealsubwon, aes(x=trial_start_date, xend=trial_end_date, 
                          y=dealname, yend=dealname,
                          color = dealname)) +  
     theme_classic() +
-    ggtitle("Project timelines") +
+#    ggtitle("Project timelines") +
     geom_segment(size=6) +
     scale_x_date(date_breaks = "month",
      labels = label_date_short()) +
