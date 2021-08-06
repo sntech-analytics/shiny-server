@@ -21,7 +21,7 @@ sidebar <-   dashboardSidebar(
         sidebarMenu(
            menuItem("Sales won", tabName = "saleswon", icon = icon("dashboard")),
            menuItem("Sales in pipeline", tabName = "salespipe", icon = icon("dashboard")),
-           menuItem("Unsuccessful sales", tabName = "saleslost", icon = icon("dashboard")),
+           menuItem("Unsuccessful bids", tabName = "saleslost", icon = icon("dashboard")),
            menuItem("Sales graphs", tabName = "wongraphs", icon = icon("th")),
            menuItem("Pipeline graphs", tabName = "pipegraphs", icon = icon("th")),
            menuItem("Close, but no cigar graphs", tabName = "lostgraphs", icon = icon("th")),
@@ -34,24 +34,25 @@ body <-   dashboardBody(
     fluidRow(
       tabItems(
          tabItem(tabName = "saleswon",
-            h2("Successful sales"),
+            h2("Successful sales", align = "center"),
             shinycssloaders::withSpinner(
               dataTableOutput(outputId="wonPipeline"))
             ),
 
          tabItem(tabName = "salespipe",
-            h2("In pipeline"),
+            h2("In pipeline", align = "center"),
             shinycssloaders::withSpinner(
               dataTableOutput(outputId="inPipeline"))
             ),
 
          tabItem(tabName = "saleslost",
-            h2("Unsuccessful bids"),
+            h2("Unsuccessful bids", align = "center"),
             shinycssloaders::withSpinner(
               dataTableOutput(outputId="lostPipeline"))
             ),
 
          tabItem(tabName = "wongraphs",
+            h2("Successful sales", align = "center"),
             shinycssloaders::withSpinner(
               plotlyOutput(outputId="stackSalesLY")),
             shinycssloaders::withSpinner(
@@ -59,6 +60,7 @@ body <-   dashboardBody(
         ),
 
          tabItem(tabName = "pipegraphs",
+            h2("In pipeline", align = "center"),
             shinycssloaders::withSpinner(
               plotlyOutput(outputId="stackPipeLY")),
             shinycssloaders::withSpinner(
@@ -66,6 +68,7 @@ body <-   dashboardBody(
         ),
 
          tabItem(tabName = "lostgraphs",
+            h2("Unsuccessful bids", align = "center"),
             shinycssloaders::withSpinner(
               plotlyOutput(outputId="stackLostLY")),
             shinycssloaders::withSpinner(
@@ -73,7 +76,7 @@ body <-   dashboardBody(
         ),
             
          tabItem(tabName = "timeline",
-           h2("Project timelines"),
+           h2("Project timelines (won and pipeline)", align = "center"),
            shinycssloaders::withSpinner(
              plotlyOutput(outputId="GanttLY"))
          )
@@ -82,7 +85,7 @@ body <-   dashboardBody(
 )
 
 ui <- dashboardPage(
-  dashboardHeader(title = "SafetyNet Tech Developmental business dashboard"),
+  dashboardHeader(title = "Business dashboard"),
   sidebar,
   body
 )

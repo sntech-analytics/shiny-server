@@ -1,11 +1,10 @@
-
 poundmonth <- function(dataset, x, title, height){
     a <- ggplot(data=dataset, aes_string(y="amount", x=x, fill="dealname")) +
     theme_classic() +
 #    ggtitle(title) +
      labs(fill='Deal name') +
      ylab("Amount (GBP)") +
-     xlab("Date") +
+     xlab("") +
      scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
      scale_x_date(date_breaks = "month",
       labels = label_date_short()) +
@@ -13,7 +12,7 @@ poundmonth <- function(dataset, x, title, height){
       theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
            axis.title = element_text(face="bold", size=12))
     
-#    ggplotly(a, height=height)
+ #   ggplotly(a, height=height)
 }
     
     
@@ -26,7 +25,7 @@ poundmonth <- function(dataset, x, title, height){
 #    ggtitle("Sales") +
      labs(fill='Deal name') +
      ylab("Amount (GBP)") +
-     xlab("Date") +
+     xlab("") +
      scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
      scale_x_date(date_breaks = "month",
       labels = label_date_short()) +
@@ -35,6 +34,6 @@ poundmonth <- function(dataset, x, title, height){
       theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
            axis.title = element_text(face="bold", size=12))
     
-    ggplotly(a, height=650)
+ #   ggplotly(a, height=height)
     }
  

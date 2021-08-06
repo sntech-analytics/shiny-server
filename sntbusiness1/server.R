@@ -78,7 +78,7 @@ output$stackLostCumLY <- renderPlotly({
      
 output$GanttLY <- renderPlotly({  
 
-     b <- ggplot(data=dealsubwon, aes(x=trial_start_date, xend=trial_end_date, 
+     b <- ggplot(data=rbind(dealsubwon,dealsubpipe), aes(x=trial_start_date, xend=trial_end_date, 
                          y=dealname, yend=dealname,
                          color = dealname)) +  
     theme_classic() +
