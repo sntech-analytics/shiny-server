@@ -13,11 +13,35 @@ poundmonth <- function(dataset, x, title, height){
            axis.title = element_text(face="bold", size=12))
     
  #   ggplotly(a, height=height)
+}  
+ 
+poundmonthLY <- function(dataset){
+    a <- plot_ly() 
+    a <- add_trace(a, data=dataset, x = ~Date, y = ~amount, type = 'bar', name = ~dealname, color = ~dealname, colors = "Dark2")
+
+    a <- layout(a, yaxis = list(title = 'Amount (GBP)',
+                                   showgrid = F,
+                                   tickprefix="£"),
+                                   barmode = 'stack')              
+    a <- rangeslider(a)
+    a   
 }
-    
+
+poundmonthcumLY <- function(dataset, datacum){   
+     a <- plot_ly() 
+     a <- add_trace(a, data=dataset, x = ~Date, y = ~amount, type = 'bar', name = ~dealname, color = ~dealname, colors = "Dark2")
+
+     a <- layout(a, yaxis = list(title = 'Amount (GBP)',
+                                   showgrid = F,
+                                   tickprefix="£"),
+                                   barmode = 'stack')
+     a <- add_trace(a, data=datacum, x = ~Date, y = ~Cumamount, #
+                           type = 'scatter',  mode = 'lines', name='Cumulative')               
+     a <- rangeslider(a)
+     a 
+ }
     
  #poundmonth(dealsubwon, "Date", "Sales", 650)
- 
  
  cumpoundmonth <- function(dataset, sumdataset, x, title, height){
     a <-  ggplot(data=dataset, aes_string(y="amount", x=x, fill="dealname")) +
@@ -36,4 +60,8 @@ poundmonth <- function(dataset, x, title, height){
     
  #   ggplotly(a, height=height)
     }
+ 
+ 
+ 
+ 
  
