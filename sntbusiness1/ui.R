@@ -25,6 +25,7 @@ sidebar <-   dashboardSidebar(
            menuItem("Sales graphs: basic", tabName = "wongraphs", icon = icon("th")),
            menuItem("Alternate sales graph (a)", tabName = "wongraphs2", icon = icon("th")),
            menuItem("Alternate sales graph (b)", tabName = "wongraphs3", icon = icon("th")),
+           menuItem("Alternate sales graph (c)", tabName = "wongraphs4", icon = icon("th")),
            menuItem("Pipeline graphs (Old)", tabName = "pipegraphs", icon = icon("th")),
            menuItem("Close, but no cigar graphs (Old)", tabName = "lostgraphs", icon = icon("th")),
            menuItem("Project timelines", tabName = "timeline", icon = icon("th"))
@@ -84,6 +85,17 @@ body <-   dashboardBody(
               plotlyOutput(outputId="stackSalesCum2LY"))
         ),      
 
+         tabItem(tabName = "wongraphs4",
+            h2("Successful sales: Yet another alternate presentation", align = "center"),
+            h4("This is a bit prettier and precise, but without the same degree of interactivity"),
+            tags$br(),
+            dateRangeInput(inputId = 'dateRange',
+             label= 'Select date range',
+            start = "2019-10-01"),
+            shinycssloaders::withSpinner(
+              plotOutput(outputId="stackSalesGGP"))
+        ),     
+
          tabItem(tabName = "pipegraphs",
             h2("In pipeline", align = "center"),
             shinycssloaders::withSpinner(
@@ -99,7 +111,8 @@ body <-   dashboardBody(
             shinycssloaders::withSpinner(
               plotlyOutput(outputId="stackLostCumLY"))
         ),
-            
+
+         
          tabItem(tabName = "timeline",
            h2("Project timelines (won and pipeline)", align = "center"),
            shinycssloaders::withSpinner(

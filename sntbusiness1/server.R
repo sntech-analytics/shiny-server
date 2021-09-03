@@ -128,6 +128,26 @@ output$stackLostCumLY <- renderPlotly({
  output$stackSalesCum2LY <- renderPlotly({ 
     poundmonthcumLY(dealsubwon, sumstatwon)
     })
+
+
+ output$stackSalesGGP <- renderPlot({
+ #   poundmonthggp(dealsubwon)
+     datasub <- subset(dealsubwon, dealsubwon$Date >= as.Date(input$dateRange[1]) & dealsubwon$Date <= as.Date(input$dateRange[2]))
+   a <- ggplot(data=datasub, aes_string(y="amount", x="Date", fill="dealname")) +
+    theme_classic() +
+#   ggtitle(title) +
+     labs(fill='Deal name') +
+     ylab("Amount (GBP)") +
+     xlab("") +
+     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+     scale_x_date(date_breaks = "month",
+      labels = label_date_short()) +
+      geom_bar(position="stack", stat="identity") +
+      theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
+           axis.title = element_text(face="bold", size=12))
+      a
+    })
+ 
  
      
 output$GanttLY <- renderPlotly({  
