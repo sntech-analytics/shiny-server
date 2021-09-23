@@ -65,7 +65,7 @@ body <-   dashboardBody(
             h4("This is a basic plotly graph. Experiment with hovering and clicking elements of the graph. You can pan, select portions to zoom. You can also select/deselect deals in the legend to display"),
             h4("On the top right there are buttons to set the cursor to pan, zoom, download the graph and so on. Double click to restore the original view"),
             shinycssloaders::withSpinner(
-              plotlyOutput(outputId="stackSalesLY"))
+              plotlyOutput(outputId="stackSalesLY", width = "70%", height="700px"))
 #            shinycssloaders::withSpinner(
  #             plotlyOutput(outputId="stackSalesCumLY"))
         ),
@@ -74,7 +74,7 @@ body <-   dashboardBody(
             h2("Successful sales: Alternate presentation", align = "center"),
             h4("This presentation adds a graphical slider. Grab the vertical white bars on the bottom plot to drag and zoom the date range"),
             shinycssloaders::withSpinner(
-              plotlyOutput(outputId="stackSales2LY")),
+              plotlyOutput(outputId="stackSales2LY", width = "70%", height="700px")),
  #           shinycssloaders::withSpinner(
 #              plotlyOutput(outputId="stackSalesCum2LY"))
         ),  
@@ -83,7 +83,7 @@ body <-   dashboardBody(
             h2("Successful sales: Alternate presentation with cumulative value", align = "center"),
             h4("As with the previous tab, but with the cumulative value added onto the plot"),
             shinycssloaders::withSpinner(
-              plotlyOutput(outputId="stackSalesCum2LY"))
+              plotlyOutput(outputId="stackSalesCum2LY", width = "70%", height="700px"))
         ),      
 
          tabItem(tabName = "wongraphs4",
@@ -117,7 +117,7 @@ body <-   dashboardBody(
          tabItem(tabName = "timeline",
            h2("Project timelines (won and pipeline)", align = "center"),
            shinycssloaders::withSpinner(
-             plotlyOutput(outputId="GanttLY"))
+             plotlyOutput(outputId="GanttLY", width = "70%", height="700px"))
          ),
          
          tabItem(tabName = "marketmapLY",
