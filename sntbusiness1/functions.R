@@ -63,8 +63,11 @@ poundmonthcumLY <- function(dataset, datacum){
  
 
  poundmonthggp <- function(dataset){
-#    datasub <- subset(dataset, Date >= as.Date(input$dateRange[1]) & Date <= as.Date(input$dateRange[2]))
-   datasub <- subset(dataset, Date >= mindate() & Date <= maxdate())
+
+    mindate <- daterange[1]
+    maxdate <- daterange[2]
+#    datasub <- subset(dataset, dataset$Date >= as.Date(input$dateRange[1]) & dataset$Date <= as.Date(input$dateRange[2]))
+   datasub <- subset(dataset, Date >= mindate & Date <= maxdate)
    a <- ggplot(data=datasub, aes_string(y="amount", x=x, fill="dealname")) +
     theme_classic() +
 #    ggtitle(title) +
@@ -78,4 +81,14 @@ poundmonthcumLY <- function(dataset, datacum){
       theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
            axis.title = element_text(face="bold", size=12))
     } 
+    
+ 
+
+ 
+    
+
+    
+    
+    
+    
  

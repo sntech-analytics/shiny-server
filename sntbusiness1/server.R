@@ -26,6 +26,10 @@ dealsubwon <- subset(dealsub, dealsub$WinLoseStatus == "Won")
 dealsubpipe <- subset(dealsub, dealsub$WinLoseStatus == "Pipeline")
 dealsublost <- subset(dealsub, dealsub$WinLoseStatus == "Lost")
 
+#Market datasets
+worldSubset <- readRDS(file="worldSubset.rds")
+worldBubbles <- readRDS(file="worldBubbles.rds")
+
 source("functions.R")
 
 # Aggregate to month, and sort for cumulative sums         
@@ -131,7 +135,7 @@ output$stackLostCumLY <- renderPlotly({
 
 
  output$stackSalesGGP <- renderPlot({
- #   poundmonthggp(dealsubwon)
+#   poundmonthggp(dealsubwon)
      datasub <- subset(dealsubwon, dealsubwon$Date >= as.Date(input$dateRange[1]) & dealsubwon$Date <= as.Date(input$dateRange[2]))
    a <- ggplot(data=datasub, aes_string(y="amount", x="Date", fill="dealname")) +
     theme_classic() +
@@ -167,7 +171,48 @@ output$GanttLY <- renderPlotly({
     ggplotly(b, height=650)
    
    })
-    
+
+output$marketmap <- renderPlotly({
+    worldHDI <- ggplot() + 
+       theme_classic() +
+        theme(axis.title=element_blank(),
+        axis.text=element_blank(),
+        axis.ticks=element_blank(),
+        axis.line = element_blank()) +
+       coord_fixed(1.3) +
+       scale_x_continuous(limits = c(min(worldSubset$long), max(worldSubset$long))) +
+       scale_y_continuous(limits = c(min(worldSubset$lat), max(worldSubset$lat))) +
+       expand_limits(y=min(worldSubset$lat), x= min(worldSubset$long)) +
+       geom_polygon(data = worldSubset, mapping = aes(x = long, y = lat, group = group),
+                    color='grey', fill='grey')
+                    
+     if (input$optlayer == "PotentialMarket") {
+         worldHDI <- worldHDI  +  geom_point(data=worldBubbles,  mapping =  aes(x = centroid.lon, y = centroid.lat,
+         size=PotentialMarket, color=PotentialMarket,
+         label=Country,
+         label2 = PotentialMarket, label3 = PercentChance, label4 = PotentialMarketRealised)) +
+         scale_color_distiller(palette ="RdBu", direction = -1)
+       }
+       
+     if (input$optlayer == "PercentChance") {
+         worldHDI <- worldHDI  +  geom_point(data=worldBubbles,  mapping =  aes(x = centroid.lon, y = centroid.lat,
+         size=PercentChance, color=PercentChance,
+         label=Country,
+         label2 = PotentialMarket, label3 = PercentChance, label4 = PotentialMarketRealised)) +
+         scale_color_distiller(palette ="RdBu", direction = -1)
+       }
+
+     if (input$optlayer == "PotentialMarketRealised") {
+         worldHDI <- worldHDI  +  geom_point(data=worldBubbles,  mapping =  aes(x = centroid.lon, y = centroid.lat,
+         size=PotentialMarketRealised, color=PotentialMarketRealised,
+         label=Country,
+         label2 = PotentialMarket, label3 = PercentChance, label4 = PotentialMarketRealised)) +
+         scale_color_distiller(palette ="RdBu", direction = -1)
+       }
+       
+     ggplotly(worldHDI, tooltip = c("label", "label2", "label3", "label4"))
+  })
+  
 }
 
 

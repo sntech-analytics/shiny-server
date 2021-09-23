@@ -28,7 +28,8 @@ sidebar <-   dashboardSidebar(
            menuItem("Alternate sales graph (c)", tabName = "wongraphs4", icon = icon("th")),
            menuItem("Pipeline graphs (Old)", tabName = "pipegraphs", icon = icon("th")),
            menuItem("Close, but no cigar graphs (Old)", tabName = "lostgraphs", icon = icon("th")),
-           menuItem("Project timelines", tabName = "timeline", icon = icon("th"))
+           menuItem("Project timelines", tabName = "timeline", icon = icon("th")),
+           menuItem("Potential market map", tabName = "marketmapLY", icon = icon("globe"))
         )
     )
 
@@ -117,7 +118,21 @@ body <-   dashboardBody(
            h2("Project timelines (won and pipeline)", align = "center"),
            shinycssloaders::withSpinner(
              plotlyOutput(outputId="GanttLY"))
+         ),
+         
+         tabItem(tabName = "marketmapLY",
+           h2("Potential market map", align = "center"),
+           column(width=3,
+              selectInput("optlayer", label = "Market measures",
+                 choices = c("Potential market" = "PotentialMarket",
+                     "Percent chance" = "PercentChance",
+                     "Predicted market" = "PotentialMarketRealised"),
+                     selected = "Potential market")),
+           column(width=9,                     
+              shinycssloaders::withSpinner(
+                 plotlyOutput(outputId="marketmap", width = "70%", height="500px")))
          )
+
       )
    )
 )
