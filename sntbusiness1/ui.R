@@ -99,6 +99,7 @@ body <-   dashboardBody(
 
          tabItem(tabName = "pipegraphs",
             h2("In pipeline", align = "center"),
+            h3("Why is this graph crap? With the re-definition of the pipeline, there are no reliable date fields to use on the x-axis.", align = "center"),
             shinycssloaders::withSpinner(
               plotlyOutput(outputId="stackPipeLY")),
             shinycssloaders::withSpinner(
