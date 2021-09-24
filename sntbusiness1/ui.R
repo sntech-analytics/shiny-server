@@ -163,7 +163,7 @@ body <-   dashboardBody(
                      selected = "Potential market")),
            column(width=9,                     
               shinycssloaders::withSpinner(
-                 plotlyOutput(outputId="marketmap", width = "90%", height="500px")))
+                 plotlyOutput(outputId="marketmap", width = "70%", height="700px")))
          )
 
       )
