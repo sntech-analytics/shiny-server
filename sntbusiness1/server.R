@@ -185,6 +185,7 @@ output$GanttLY <- renderPlotly({
 output$marketmap <- renderPlotly({
     worldHDI <- ggplot() + 
        theme_classic() +
+       theme(panel.background = element_rect(fill = 'lightblue1', colour = 'lightblue1')) +
         theme(axis.title=element_blank(),
         axis.text=element_blank(),
         axis.ticks=element_blank(),
@@ -195,7 +196,8 @@ output$marketmap <- renderPlotly({
        scale_size_continuous(range = c(3, 8)) +
        expand_limits(y=min(worldSubset$lat), x= min(worldSubset$long)) +
        geom_polygon(data = worldSubset, mapping = aes(x = long, y = lat, group = group),
-                    color='grey', fill='grey')
+                    color='grey50', fill='grey50')
+
                     
      if (input$optlayer == "PotentialMarket") {
          worldHDI <- worldHDI  +  geom_point(data=worldBubbles,  mapping =  aes(x = centroid.lon, y = centroid.lat,
@@ -203,7 +205,7 @@ output$marketmap <- renderPlotly({
          label=Country,
          label2 = PotentialMarket, label3 = PercentChance, label4 = PotentialMarketRealised)) +
 #         scale_color_distiller(palette ="RdBu", direction = -1)
-         scale_color_distiller(palette ="Reds", direction = -1)
+         scale_color_distiller(palette ="Reds", direction = 1)
        }
        
      if (input$optlayer == "PercentChance") {
@@ -211,7 +213,7 @@ output$marketmap <- renderPlotly({
          size=PercentChance, color=PercentChance,
          label=Country,
          label2 = PotentialMarket, label3 = PercentChance, label4 = PotentialMarketRealised)) +
-         scale_color_distiller(palette ="Reds", direction = -1)
+         scale_color_distiller(palette ="Reds", direction = 1)
        }
 
      if (input$optlayer == "PotentialMarketRealised") {
@@ -219,7 +221,7 @@ output$marketmap <- renderPlotly({
          size=PotentialMarketRealised, color=PotentialMarketRealised,
          label=Country,
          label2 = PotentialMarket, label3 = PercentChance, label4 = PotentialMarketRealised)) +
-         scale_color_distiller(palette ="Reds", direction = -1)
+         scale_color_distiller(palette ="Reds", direction = 1)
        }
        
      ggplotly(worldHDI, tooltip = c("label", "label2", "label3", "label4"))
