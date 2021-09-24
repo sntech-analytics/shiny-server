@@ -14,6 +14,7 @@ library(data.table)
 library(scales)
 library(magrittr)
 
+
 dealsub <- readRDS("dealsub.RDS")
 
 namesub1 <- c("Date", "dealname", "customer", "country", "amount", "product", "number_of_kits_required", 
@@ -21,6 +22,15 @@ namesub1 <- c("Date", "dealname", "customer", "country", "amount", "product", "n
 
 namesub2 <- c("Date", "Deal", "Customer", "Country", "Amount", "Product", "Number required", 
               "Species", "Method", "Waters", "Outcome")
+
+#The pipeline spreadsheet needs the probability included
+namesubpipe1 <- c("Date", "dealname", "customer", "country", "amount", "hs_forecast_probability", "product", "number_of_kits_required", 
+              "fishery__species_", "fishery__method_", "fisher__waters_", "objective")
+
+namesubpipe2 <- c("Date", "Deal", "Customer", "Country", "Amount", "Probability", "Product", "Number required", 
+              "Species", "Method", "Waters", "Outcome")
+
+
 
 dealsubwon <- subset(dealsub, dealsub$WinLoseStatus == "Won")
 dealsubpipe <- subset(dealsub, dealsub$WinLoseStatus == "Pipeline")
@@ -37,7 +47,7 @@ sumstat <- aggregate(round(amount, 0) ~ Date + WinLoseStatus, sum, data=dealsub)
 names(sumstat) <- c('Date', 'WinLoseStatus', 'Amount') 
 sumstat <- sumstat[order(sumstat$Date, -sumstat$Amount),]
 
-#Cumulative sums for each catagory
+#Cumulative sums for each category
 sumstatwon <- subset(sumstat, sumstat$WinLoseStatus == "Won")
 sumstatwon$Cumamount <- cumsum(sumstatwon$Amount)
 
@@ -67,8 +77,8 @@ output$wonPipeline <- renderDT({
                        })
 
 output$inPipeline <- renderDT({
-                       datatable(dealsubpipe[namesub1], rownames=F,
-                       colnames = namesub2,
+                       datatable(dealsubpipe[namesubpipe1], rownames=F,
+                       colnames = namesubpipe2,
                        filter = 'bottom',
                        extensions = list('ColReorder' = NULL, 'Buttons' = NULL),
                        options = list(scrollX = TRUE,
@@ -182,6 +192,7 @@ output$marketmap <- renderPlotly({
        coord_fixed(1.3) +
        scale_x_continuous(limits = c(min(worldSubset$long), max(worldSubset$long))) +
        scale_y_continuous(limits = c(min(worldSubset$lat), max(worldSubset$lat))) +
+       scale_size_continuous(range = c(3, 8)) +
        expand_limits(y=min(worldSubset$lat), x= min(worldSubset$long)) +
        geom_polygon(data = worldSubset, mapping = aes(x = long, y = lat, group = group),
                     color='grey', fill='grey')
