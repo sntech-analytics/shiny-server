@@ -210,7 +210,7 @@ output$marketmap <- renderPlotly({
          size=PercentChance, color=PercentChance,
          label=Country,
          label2 = PotentialMarket, label3 = PercentChance, label4 = PotentialMarketRealised)) +
-         scale_color_distiller(palette ="RdBu", direction = -1)
+         scale_color_distiller(palette ="Reds", direction = -1)
        }
 
      if (input$optlayer == "PotentialMarketRealised") {
