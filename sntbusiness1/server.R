@@ -171,7 +171,7 @@ output$GanttLY <- renderPlotly({
                          color = dealname)) +  
     theme_classic() +
 #    ggtitle("Project timelines") +
-    geom_segment(size=6) +
+    geom_segment(size=3) +
     scale_x_date(date_breaks = "month",
      labels = label_date_short()) +
     theme(legend.position = "none",
