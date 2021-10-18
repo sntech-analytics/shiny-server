@@ -17,14 +17,16 @@ library(magrittr)
 
 dealsub <- readRDS("dealsub.RDS")
 
-namesub1 <- c("Date", "dealname", "customer", "country", "amount", "product", "number_of_kits_required", 
+#namesub1 <- c("Date", "dealname", "customer", "country", "amount", "product", "number_of_kits_required", 
+namesub1 <- c("closedate", "dealname", "customer", "country", "amount", "product", "number_of_kits_required", 
               "fishery__species_", "fishery__method_", "fisher__waters_", "objective")
 
 namesub2 <- c("Date", "Deal", "Customer", "Country", "Amount", "Product", "Number required", 
               "Species", "Method", "Waters", "Outcome")
 
 #The pipeline spreadsheet needs the probability included
-namesubpipe1 <- c("Date", "dealname", "customer", "country", "amount", "hs_forecast_probability", "product", "number_of_kits_required", 
+#namesubpipe1 <- c("Date", "dealname", "customer", "country", "amount", "hs_forecast_probability", "product", "number_of_kits_required", 
+namesubpipe1 <- c("closedate", "dealname", "customer", "country", "amount", "hs_forecast_probability", "product", "number_of_kits_required", 
               "fishery__species_", "fishery__method_", "fisher__waters_", "objective")
 
 namesubpipe2 <- c("Date", "Deal", "Customer", "Country", "Amount", "Probability", "Product", "Number required", 
