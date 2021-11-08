@@ -13,9 +13,13 @@ library(plotly)
 library(data.table)
 library(scales)
 library(magrittr)
+library(httr)
+library(jsonlite)
 
 
-dealsub <- readRDS("dealsub.RDS")
+#dealsub <- readRDS("dealsub.RDS")
+
+source("CurlScript.R")
 
 #namesub1 <- c("Date", "dealname", "customer", "country", "amount", "product", "number_of_kits_required", 
 namesub1 <- c("CloseDate", "dealname", "customer", "country", "amount", "product", "number_of_kits_required", 
