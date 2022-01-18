@@ -98,6 +98,7 @@ output$weightdat <- renderTable({
                       req(input$file1)
                       weightdat <- datain()[c('WeightVariable','Weight')]
                       weightdat <- weightdat[complete.cases(weightdat),]
+                      weightdat$Percent <- weightdat$Weight*100/sum(weightdat$Weight)
                       weightdat
                       })
 
