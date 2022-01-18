@@ -99,6 +99,10 @@ output$weightdat <- renderTable({
                       weightdat <- datain()[c('WeightVariable','Weight')]
                       weightdat <- weightdat[complete.cases(weightdat),]
                       weightdat$Percent <- weightdat$Weight*100/sum(weightdat$Weight)
+                      testsum <- data.frame(unlist(t(colSums(weightdat[c('Weight', 'Percent')]))))
+                      testsum$WeightVariable <- "TOTAL"
+                      weightdat$Percent <- round(weightdat$Percent, 2)
+                      weightdat <- rbind(weightdat, testsum)                                           
                       weightdat
                       })
 
