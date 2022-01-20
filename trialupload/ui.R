@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(shinyalert)
 library(readxl)
 library(readODS)
 library(ggplot2)
@@ -8,6 +9,14 @@ library(htmltools)
 library(shinycssloaders)
 library(shinyWidgets)
 library(data.table)
+library(lubridate)
+library(ggpubr)
+library(plotly)
+library(RMariaDB)
+library(RMySQL)
+library(config)
+library(pool)
+library(scales)
 
 sidebar <- dashboardSidebar(
              tags$img(src="safetynet_logoWB.png",
@@ -23,6 +32,7 @@ sidebar <- dashboardSidebar(
 
 
 body <-   dashboardBody(
+    useShinyalert(),
       tabItems(
          tabItem(tabName = "instructions",
                  fluidRow(
@@ -48,15 +58,6 @@ link it all up")
 
          tabItem(tabName = "upload",
             fluidRow(
-     #               h2("Select the Excel or OpenOffice/LibreOffice ODS file and sheet in the file", align = "center"),
-#                column(width=3,                     
-#                    h2("After selecting the sheet, eyeball the data and check the details are correct", align = "center"),
-#                box(title="Select data file", width=12, status="primary",
-#                   fileInput('file1', 'Excel (xlsx) or LibreOffice (ods) spreadsheet file', 
-#                             accept = c(".xlsx", ".ods")),
-#                   numericInput('file1sheet','Sheet number (in order on the spreadsheet)', 1),
-#                   actionButton("upload", "Upload sheet to database")
-#                    ),
 
                 box(title="Select data file", width=4, status="primary",
                    fileInput('file1', 'Excel (xlsx) or LibreOffice (ods) spreadsheet file',
@@ -70,7 +71,6 @@ link it all up")
                 box(title="Check data sheet, then submit to database", width=4, status="primary",
                    actionButton("upload", "Upload sheet to database")
                  ),
-#                   h4("Check the data details. If they are correct, upload the data. If not, correct the source file", align = "center"),
 
                    box(width=12, infoBoxOutput("observer"),
                    infoBoxOutput("vessel"),
@@ -78,15 +78,7 @@ link it all up")
                    infoBoxOutput("haul"),
                    infoBoxOutput("treatment"),
                    infoBoxOutput("notes")
-                      ),                
-                
-                
-#                   box(infoBoxOutput("observer")),
-#                   box(infoBoxOutput("vessel")),
-#                   box(infoBoxOutput("date")),
-#                   box(infoBoxOutput("haul")),
-#                   box(infoBoxOutput("treatment")),
-                
+                      ),                         
                 
                     ),
                  
@@ -100,17 +92,19 @@ link it all up")
                  box(title="Fish lengths", status="primary", tableOutput("fishdat"), width=12)
                       )                
                  
-#                 )
             ),
         
          tabItem(tabName = "uploaded",
                 fluidRow(
-           h2("Table of data uploaded to the sandbox database", align = "center")
+           h2("Table of data uploaded to the sandbox database", align = "center"),
+           actionButton("checkdat", "Refresh to check data entry status"),
+           tableOutput("metadat")
+                    
          )
         )
       )
    )
-#)
+
 
 
 ui <- dashboardPage(
@@ -118,5 +112,6 @@ ui <- dashboardPage(
   sidebar,
   body
 )
+
 
 
