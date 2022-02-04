@@ -17,6 +17,10 @@ library(RMySQL)
 library(config)
 library(pool)
 library(scales)
+library(ssh)
+library(jpeg)
+library(base64enc)
+
 
 
 server <- function(input, output) {
@@ -101,7 +105,7 @@ output$observer <- renderInfoBox({
 output$vessel <- renderInfoBox({
     req(input$file1)
     infoBox(
-    "Vessel", datain()[1,2], icon = icon("ship")
+    "Vessel", datain()[4,1], icon = icon("ship")
 
         )
     })
@@ -109,22 +113,23 @@ output$vessel <- renderInfoBox({
 output$date <- renderInfoBox({
     req(input$file1)
     infoBox(
-    "Date", format(datain()[1,3], format="%d %b %Y"), icon = icon("calendar")
+    "Date", format(datain()[1,2], format="%d %b %Y"), icon = icon("calendar")
        
         )
     })
+
     
 output$haul <- renderInfoBox({
     req(input$file1)
     infoBox(
-    "Haul", datain()[1,4], icon = icon("wifi")
+    "Haul", datain()[19,1], icon = icon("wifi")
         )
     })        
 
 output$treatment <- renderInfoBox({
     req(input$file1)
     infoBox(
-    "Treatment", paste(toupper(datain()[1,5]), toupper(datain()[1,6]), datain()[1,7], datain()[1,8], datain()[1,9], sep='_'),
+    "Treatment", paste(toupper(datain()[19,1]), toupper(datain()[1,4]), datain()[4,4], datain()[7,4], datain()[10,4], sep='_'),
         icon = icon("lightbulb")
         )
     }) 
@@ -132,18 +137,57 @@ output$treatment <- renderInfoBox({
 output$notes <- renderInfoBox({
     req(input$file1)
     infoBox(
-    "Notes", datain()[1,10], , icon = icon("clipboard")
+    "Notes", datain()[1,5], , icon = icon("clipboard")
         )
     })  
     
 
+### Now the image verification infoBoxes    
+output$imagevessel <- renderInfoBox({
+    infoBox(
+    "Vessel", input$imvessel, icon = icon("ship")
+        )
+    })
+    
+output$imagedate <- renderInfoBox({
+    infoBox(
+    "Date", input$imdate, icon = icon("calendar")       
+        )
+    })
+    
+output$imagehaul <- renderInfoBox({
+    infoBox(
+    "Haul", input$imhaul, icon = icon("wifi")
+        )
+    })    
+    
+output$imageside <- renderInfoBox({
+    infoBox(
+    "Side", input$imside, icon = icon("ship")
+        )
+    })  
+
+output$imagelight <- renderInfoBox({
+    infoBox(
+    "Light", input$imlight, icon = icon("lightbulb")
+        )
+    }) 
+        
+output$imageloc <- renderInfoBox({
+    infoBox(
+    "Location", input$imloc, icon = icon("camera")
+        )
+    }) 
+    
+    
 output$weightdat <- renderTable({
                       req(input$file1)
-                      weightdat <- datain()[c('WeightVariable','Weight')]
+                      weightdat <- datain()[,6:7]
+                      names(weightdat) <- c('Category', 'Weight')
                       weightdat <- weightdat[complete.cases(weightdat),]
                       weightdat$Percent <- weightdat$Weight*100/sum(weightdat$Weight)
                       testsum <- data.frame(unlist(t(colSums(weightdat[c('Weight', 'Percent')]))))
-                      testsum$WeightVariable <- "TOTAL"
+                      testsum$Category <- "TOTAL"
                       weightdat$Percent <- round(weightdat$Percent, 2)
                       weightdat <- rbind(weightdat, testsum)                                           
                       weightdat
@@ -151,13 +195,15 @@ output$weightdat <- renderTable({
 
 output$fishdat <- renderTable({
                       req(input$file1)
-                      datain()[,13:ncol(datain())]
+                      fishdat <- datain()[,8:ncol(datain())]
+                      fishdat <- fishdat[rowSums(is.na(fishdat)) != ncol(fishdat), ]
+                      fishdat
                       },
                       digits=0) 
    
 output$sumdat <- renderTable({
     req(input$file1)
-    dt1 <- setDT(datain()[,13:ncol(datain())])
+    dt1 <- setDT(datain()[,8:ncol(datain())])
     dt1 <- melt(dt1)
     dt1 <- na.omit(dt1)
     names(dt1) <- c("Species", "value")
@@ -177,15 +223,32 @@ output$sumdat <- renderTable({
                    
 observeEvent(input$upload, {
     timestamp <- format(Sys.time(), "%Y_%m_%d_%X") 
-    metadat <- datain()[1,1:10]
-    metadat$YearMonthDay <- format(metadat$Date, format="%Y-%m-%d") 
-    metadat$Date <- metadat$YearMonthDay 
-    metadat$timestamp <- timestamp
-    metadat$ID <- apply(datain()[1, 1:9] , 1 , paste , collapse = "_")
-    metadat <- metadat[c("Observer", "Vessel", "Date", "YearMonthDay", "Haul_Pair", "Net", "Light_on_off", 
-                         "Colour", "Flash", "Intensity", "Notes", "ID", "timestamp")]
+    metadat <- data.frame(cbind(datain()[1,1],
+                     datain()[4,1],
+                     datain()[7,1],
+                     datain()[10,1],
+                     datain()[13,1],
+                     data.frame(as.numeric(datain()[16,1])),
+                     datain()[19,1],
+                     format(datain()[1,2], format="%Y-%m-%d"),
+                     format(datain()[1,2], format="%Y-%m-%d"),
+                     format(datain()[1,3], format="%X"),
+                     datain()[1,4],
+                     datain()[4,4],
+                     datain()[7,4],
+                     datain()[10,4],
+                     datain()[1,5]))
 
-    dt1 <- setDT(datain()[,13:ncol(datain())])
+     names(metadat) <- c("Observer", "Vessel", "Gear", "Position", "Sample_type", "Haul", "Net", 
+                   "Date", "YearMonthDay", "Time", "LightOnOff", "Colour", "Flash", "Intensity", "Notes")
+   
+    
+    cols <- c("Observer", "Vessel", "YearMonthDay", "Haul", "Net", 
+                   "LightOnOff", "Colour", "Flash", "Intensity")
+    metadat$ID <- apply(metadat[1, cols] , 1 , paste , collapse = "_")
+    metadat$timestamp <- timestamp
+
+    dt1 <- setDT(datain()[,8:ncol(datain())])
     dt1 <- melt(dt1)
     dt1 <- na.omit(dt1)
     names(dt1) <- c("Species", "Length")
@@ -196,7 +259,8 @@ observeEvent(input$upload, {
     SpeciesLength$timestamp <- timestamp 
     SpeciesLength$Species <- as.character(SpeciesLength$Species)
 
-    weightdat <- datain()[c('WeightVariable','Weight')]
+    weightdat <- datain()[ ,6:7]
+    names(weightdat) <- c('WeightVariable', 'Weight')
     weightdat <- weightdat[complete.cases(weightdat),]
     weightdat$ID <- metadat[1,'ID']
     weightdat$timestamp <- timestamp 
@@ -210,15 +274,57 @@ observeEvent(input$upload, {
                    
                    
 output$metadat <- renderTable({
-    loadData("sampleID")
+    dat <- loadData("sampleID")
+    cols <- c("Observer", "Vessel", "YearMonthDay", "Haul", "Net", "LightOnOff", "Colour", "Flash",
+              "Intensity", "Notes", "timestamp")
+    dat <- dat[cols]
+    dat
 })  
-                   
+  
+
 observeEvent(input$checkdat, {
     output$metadat <- renderTable({
-    loadData("sampleID")
+    dat <- loadData("sampleID")
+    cols <- c("Observer", "Vessel", "YearMonthDay", "Haul", "Net", "LightOnOff", "Colour", "Flash",
+              "Intensity", "Notes", "timestamp")
+    dat <- dat[cols]
+    dat
             })
 })    
 
+                     
+  output$preview <- renderImage({
+      req(input$imageup)
+    if (!is.null(input$imageup)) { 
+        filename <- as.character(input$imageup$datapath)        
+        return(list(
+        src=filename,
+        height=300,
+        filetype = "image/jpeg"))
+        }
+      }, deleteFile = FALSE)
+
+
+
+observeEvent(input$imageupload, {
+    if (!is.null(input$imageup)) {
+        imagein <- readJPEG(input$imageup$datapath)
+        fileName <- paste0(paste(input$imdate, input$imvessel, "Haul", input$imhaul, input$imside, 
+                           input$imlight, input$imloc, sep="_"), ".JPG")
+         filePath <- file.path("/home/sntech/sandimage/", fileName)
+
+#Local testing directory
+#         filePath <- file.path("/home/csyms/sandimage/", fileName)
+         writeJPEG(imagein, filePath)
+        shinyalert("Photo submitted!", type = "success")
+#
+    } else {
+      return(NULL)
+    }
+})                   
+                  
+                   
+                   
                    
 }   
 

@@ -17,6 +17,15 @@ library(RMySQL)
 library(config)
 library(pool)
 library(scales)
+library(ssh)
+library(jpeg)
+library(base64enc)
+
+
+bullet <- "\U2022"
+observerID <- c("Tom", "Bruce", "Craig", "Kyle")
+vesselID <- c("Virtuous", "GoldenRay", "LeeRose","EilidhAnne")
+options(shiny.maxRequestSize = 30*1024^2)
 
 sidebar <- dashboardSidebar(
              tags$img(src="safetynet_logoWB.png",
@@ -26,6 +35,7 @@ sidebar <- dashboardSidebar(
            sidebarMenu(
              menuItem("Instructions", tabName = "instructions", icon = icon("info-circle")),
              menuItem("Data upload", tabName = "upload", icon = icon("dashboard")),
+             menuItem("Photo upload", tabName = "photo", icon = icon("camera")),
              menuItem("Uploaded to date", tabName = "uploaded", icon = icon("chart-bar"))
         )
     )
@@ -34,26 +44,32 @@ sidebar <- dashboardSidebar(
 body <-   dashboardBody(
     useShinyalert(),
       tabItems(
-         tabItem(tabName = "instructions",
-                 fluidRow(
+
+          tabItem(tabName = "instructions",
+                   fluidRow(
                     h2("Trials data upload interface", align = "center"),
-                    h4("I will write a proper set of instructions to lead folks through it", align = "center"),
                     tags$ul(
-                        tags$li("The Data Upload page shows what I had in mind. The sampler has a single Excel or ODS file 
+                        tags$h4(paste0(bullet, "  ", 
+                                       "The Data Upload page shows what I had in mind. The sampler has a single Excel or ODS file 
  for each trip. The sheets have a validation on them, and they can't move columns around. The first 12 columns are
 allocated 
 to fixed elements of the data. The Species lengths can be added as required, but the species names will come from 
-a validated dropdown list."),
-                        tags$li("When the sampler is happy they have the correct sheet highlighted, they can scan for any 
-errors (I can add further checks), then they click to upload the data."),
-                        tags$li("The data enterer cannot overwrite or delete anything in the database. If they 
-screw up, I will fix it."),
-                        tags$li("When I link the Upload button to the database, the data are appended to a sandbox
- database on the server"),
-                        tags$li("The current data upload status can be viewed on the 'Uploaded to date' tab, after I 
-link it all up")
+a validated dropdown list.")),
+                        tags$h4(paste0(bullet, "  ",
+                                       "When the sampler is happy they have the correct sheet highlighted, they can scan for any 
+errors (I can add further checks), then they click to upload the data.")),
+                        tags$h4(paste0(bullet, "  ",
+                                       "The data enterer cannot overwrite or delete anything in the database. If they 
+screw up, I will fix it.")),
+                        tags$h4(paste0(bullet, "  ",
+                                       "When I link the Upload button to the database, the data are appended to a sandbox
+ database on the server")),
+                        tags$h4(paste0(bullet, "  ",
+                                       "The current data upload status can be viewed on the 'Uploaded to date' tab, after I 
+link it all up"))
                     )
                      )
+                    
                  ),
 
          tabItem(tabName = "upload",
@@ -101,9 +117,47 @@ link it all up")
            tableOutput("metadat")
                     
          )
-        )
+        ),
+# Need to add a whole pile of options here          
+         tabItem(tabName = "photo",
+                fluidRow(
+                   h2("Image upload: jpeg only", align = "center"),
+                    box(title="Select image file and sample identifiers", width=3, status="primary",
+                       fileInput("imageup", "Upload image", accept =  c('image/jpeg','image/jpg')),
+                       selectInput("imvessel", "Vessel", choices = vesselID, selectize = TRUE),
+                       dateInput("imdate", "Date"),
+                       numericInput('imhaul', 'Haul number', 1),
+                       selectInput("imside", "Side of vessel", choices = c("Port", "Starboard", "All"),
+                                   selectize = TRUE),
+                       selectInput("imlight", "Light on or off", choices = c("Off", "On"),
+                                   selectize = TRUE), 
+                       selectInput("imloc", "Photo location (only 1 of each)", 
+                                   choices = c("Hopper", "Sample", "Net"), selectize = TRUE)
+                       ),
+
+                    box(title="Image preview", width=4, status="primary",
+                       imageOutput("preview")
+                        ),
+
+                    box(title="Identifier check", width=5, status="primary",
+ #                      imageOutput("preview"),
+                         infoBoxOutput("imagevessel"),
+                         infoBoxOutput("imagedate"),
+                         infoBoxOutput("imagehaul"),
+                         infoBoxOutput("imageside"),
+                         infoBoxOutput("imagelight"),
+                         infoBoxOutput("imageloc"),
+                         actionButton("imageupload", "If all details are correct, upload image")
+                        )
+                    
+         )
+        )          
+          
+      )    
+          
       )
-   )
+
+
 
 
 
@@ -112,6 +166,7 @@ ui <- dashboardPage(
   sidebar,
   body
 )
+
 
 
 
