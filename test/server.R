@@ -25,7 +25,7 @@ options(shiny.maxRequestSize = 30*1024^2)
 
 server <- function(input, output) {
 
-session <- ssh_connect("sntech@77.68.125.129", keyfile="./id_rsa")
+#session <- ssh_connect("sntech@77.68.125.129", keyfile="./id_rsa")
 
   output$value <- renderTable({
     if (!is.null(input$file1)) {        
@@ -67,10 +67,11 @@ observeEvent(input$validate, {
     if (!is.null(input$imagefile)) {
         imagein <- readJPEG(input$imagefile$datapath)
         fileName <- "shinyupload.jpeg"
-        filePath <- file.path(tempdir(), fileName)
-        writeJPEG(imagein, filePath)
+ #       filePath <- file.path(tempdir(), fileName)
+         filePath <- "/home/sntech/sandimage"
+         writeJPEG(imagein, paste0(filePath, filename))
 #          filename <- as.character(input$file1$name)
-          scp_upload(session, filePath, to="/home/sntech/sandimage/")     
+#          scp_upload(session, filePath, to="/home/sntech/sandimage/")     
 #
     } else {
       return(NULL)
