@@ -68,8 +68,8 @@ observeEvent(input$validate, {
         imagein <- readJPEG(input$imagefile$datapath)
         fileName <- "shinyupload.jpeg"
  #       filePath <- file.path(tempdir(), fileName)
-         filePath <- "/home/sntech/sandimage/"
-         writeJPEG(imagein, paste0(filePath, filename))
+         filePath <- file.path("/home/sntech/sandimage/", filename)
+         writeJPEG(imagein, filePath)
 #          filename <- as.character(input$file1$name)
 #          scp_upload(session, filePath, to="/home/sntech/sandimage/")     
 #
