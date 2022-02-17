@@ -273,24 +273,66 @@ observeEvent(input$upload, {
     })    
                    
                    
-output$metadat <- renderTable({
+#output$metadat <- renderTable({
+#    dat <- loadData("sampleID")
+#    cols <- c("Observer", "Vessel", "YearMonthDay", "Haul", "Net", "LightOnOff", "Colour", "Flash",
+#              "Intensity", "Notes", "timestamp")
+#    dat <- dat[cols]
+#    dat
+#})  
+ 
+# observeEvent(input$checkdat, {
+#    output$metadat <- renderTable({
+#    dat <- loadData("sampleID")
+#    cols <- c("Observer", "Vessel", "YearMonthDay", "Haul", "Net", "LightOnOff", "Colour", "Flash",
+#              "Intensity", "Notes", "timestamp")
+#    dat <- dat[cols]
+#    dat
+#            })
+#})   
+ 
+output$metadat <- renderDT({
     dat <- loadData("sampleID")
     cols <- c("Observer", "Vessel", "YearMonthDay", "Haul", "Net", "LightOnOff", "Colour", "Flash",
               "Intensity", "Notes", "timestamp")
-    dat <- dat[cols]
-    dat
+    dat <- datatable(dat[cols],
+                     filter = 'bottom',
+                     extensions = list('ColReorder' = NULL, 'Buttons' = NULL),
+                     options = list(scrollX = TRUE,
+                                   colReorder = TRUE,
+                                   autoWidth = TRUE,
+                                   pageLength = 10,
+                                   lengthMenu = list(c(10, 25, -1), c("10", "25", "All")),
+                                   fixedHeader = TRUE,
+                                   dom = 'lfrtip'
+#                                      dom = 'lfrtipB'
+#                                      dom = 'lBfrtip',                                     
+                                 ))
+     dat
 })  
   
-
 observeEvent(input$checkdat, {
-    output$metadat <- renderTable({
+output$metadat <- renderDT({
     dat <- loadData("sampleID")
     cols <- c("Observer", "Vessel", "YearMonthDay", "Haul", "Net", "LightOnOff", "Colour", "Flash",
               "Intensity", "Notes", "timestamp")
-    dat <- dat[cols]
-    dat
-            })
-})    
+    dat <- datatable(dat[cols],
+                     filter = 'bottom',
+                     extensions = list('ColReorder' = NULL, 'Buttons' = NULL),
+                     options = list(scrollX = TRUE,
+                                   colReorder = TRUE,
+                                   autoWidth = TRUE,
+                                   pageLength = 10,
+                                   lengthMenu = list(c(10, 25, -1), c("10", "25", "All")),
+                                   fixedHeader = TRUE,
+                                   dom = 'lfrtip'
+#                                      dom = 'lfrtipB'
+#                                      dom = 'lBfrtip',                                     
+                                 ))
+          dat
+       })
+})   
+ 
 
                      
   output$preview <- renderImage({
@@ -308,13 +350,14 @@ observeEvent(input$checkdat, {
 
 observeEvent(input$imageupload, {
     if (!is.null(input$imageup)) {
+        timestamp <- format(Sys.time(), "%Y_%m_%d_%X") 
         imagein <- readJPEG(input$imageup$datapath)
         fileName <- paste0(paste(input$imdate, input$imvessel, "Haul", input$imhaul, input$imside, 
-                           input$imlight, input$imloc, sep="_"), ".JPG")
-         filePath <- file.path("/home/sntech/sandimage/", fileName)
+                           input$imlight, input$imloc, timestamp, sep="_"), ".JPG")
+#         filePath <- file.path("/home/sntech/sandimage/", fileName)
 
 #Local testing directory
-#         filePath <- file.path("/home/csyms/sandimage/", fileName)
+         filePath <- file.path("/home/csyms/sandimage/", fileName)
          writeJPEG(imagein, filePath)
         shinyalert("Photo submitted!", type = "success")
 #
@@ -323,7 +366,59 @@ observeEvent(input$imageupload, {
     }
 })                   
                   
+ output$photodat <- renderDT({
+#    dat <- system("ls /home/csyms/sandimage/", intern=TRUE)
+     dat <- system("ls /home/sntech/sandimage/", intern=TRUE)   
+    ident <-  substring(dat, 1, nchar(dat)-4)          
+    sub <- substring(dat, 1, nchar(dat)-24) 
+    date <- substring(sub, 1, 10)
+    sample <- substring(sub, 12, nchar(sub))
+    table <- data.frame(cbind(date, sample, ident))
+    names(table) <- c("SampleDate", "Sample", "FileID")
+    dat <- datatable(table,
+                     filter = 'bottom',
+                     extensions = list('ColReorder' = NULL, 'Buttons' = NULL),
+                     options = list(scrollX = TRUE,
+                                   colReorder = TRUE,
+                                   autoWidth = TRUE,
+                                   pageLength = 10,
+                                   lengthMenu = list(c(10, 25, -1), c("10", "25", "All")),
+                                   fixedHeader = TRUE,
+                                   dom = 'lfrtip'
+#                                      dom = 'lfrtipB'
+#                                      dom = 'lBfrtip',                                     
+                                 ))
+     dat
+})
                    
+
+observeEvent(input$checkphoto, {                   
+ output$photodat <- renderDT({
+ #   dat <- system("ls /home/csyms/sandimage/", intern=TRUE)
+    dat <- system("ls /home/sntech/sandimage/", intern=TRUE) 
+    ident <-  substring(dat, 1, nchar(dat)-4)          
+    sub <- substring(dat, 1, nchar(dat)-24) 
+    date <- substring(sub, 1, 10)
+    sample <- substring(sub, 12, nchar(sub))
+    table <- data.frame(cbind(date, sample, ident))
+    names(table) <- c("SampleDate", "Sample", "FileID")
+    dat <- datatable(table,
+                     filter = 'bottom',
+                     extensions = list('ColReorder' = NULL, 'Buttons' = NULL),
+                     options = list(scrollX = TRUE,
+                                   colReorder = TRUE,
+                                   autoWidth = TRUE,
+                                   pageLength = 10,
+                                   lengthMenu = list(c(10, 25, -1), c("10", "25", "All")),
+                                   fixedHeader = TRUE,
+                                   dom = 'lfrtip'
+#                                      dom = 'lfrtipB'
+#                                      dom = 'lBfrtip',                                     
+                                 ))
+     dat
+})
+})
+                                   
                    
                    
 }   

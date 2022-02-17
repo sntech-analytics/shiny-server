@@ -35,14 +35,17 @@ sidebar <- dashboardSidebar(
            sidebarMenu(
              menuItem("Instructions", tabName = "instructions", icon = icon("info-circle")),
              menuItem("Data upload", tabName = "upload", icon = icon("dashboard")),
+             menuItem("Data uploaded to date", tabName = "uploaded", icon = icon("chart-bar")),
              menuItem("Photo upload", tabName = "photo", icon = icon("camera")),
-             menuItem("Uploaded to date", tabName = "uploaded", icon = icon("chart-bar"))
+             menuItem("Photos uploaded to date", tabName = "photoload", icon = icon("camera")),
+             menuItem("Preliminary graphs", tabName = "graphics", icon = icon("chart-bar"))
+             
         )
     )
 
 
 body <-   dashboardBody(
-    useShinyalert(),
+#    useShinyalert(),
       tabItems(
 
           tabItem(tabName = "instructions",
@@ -114,10 +117,12 @@ link it all up"))
                 fluidRow(
            h2("Table of data uploaded to the sandbox database", align = "center"),
            actionButton("checkdat", "Refresh to check data entry status"),
-           tableOutput("metadat")
+#           tableOutput("metadat")
+            DTOutput("metadat") 
                     
          )
         ),
+
 # Need to add a whole pile of options here          
          tabItem(tabName = "photo",
                 fluidRow(
@@ -127,12 +132,12 @@ link it all up"))
                        selectInput("imvessel", "Vessel", choices = vesselID, selectize = TRUE),
                        dateInput("imdate", "Date"),
                        numericInput('imhaul', 'Haul number', 1),
-                       selectInput("imside", "Side of vessel", choices = c("Port", "Starboard", "All"),
+                       selectInput("imside", "Side of vessel", choices = c("", "Port", "Starboard", "All"),
                                    selectize = TRUE),
-                       selectInput("imlight", "Light on or off", choices = c("Off", "On"),
+                       selectInput("imlight", "Light on or off", choices = c("", "Off", "On"),
                                    selectize = TRUE), 
                        selectInput("imloc", "Photo location (only 1 of each)", 
-                                   choices = c("Hopper", "Sample", "Net"), selectize = TRUE)
+                                   choices = c("", "Hopper", "Sample", "Net"), selectize = TRUE)
                        ),
 
                     box(title="Image preview", width=4, status="primary",
@@ -151,7 +156,25 @@ link it all up"))
                         )
                     
          )
-        )          
+        ),
+        
+         tabItem(tabName = "photoload",
+                fluidRow(
+           h2("Table of photos uploaded to the server", align = "center"),
+           actionButton("checkphoto", "Refresh to check photo upload to server"),
+#           tableOutput("metadat")
+            DTOutput("photodat") 
+                    
+         )
+        ),
+        
+          tabItem(tabName = "graphics",
+                fluidRow(
+           h2("Graphs: Watch this space", align = "center")
+                    
+         )
+        )       
+                  
           
       )    
           
