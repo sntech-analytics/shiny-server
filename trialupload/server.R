@@ -354,10 +354,10 @@ observeEvent(input$imageupload, {
         imagein <- readJPEG(input$imageup$datapath)
         fileName <- paste0(paste(input$imdate, input$imvessel, "Haul", input$imhaul, input$imside, 
                            input$imlight, input$imloc, timestamp, sep="_"), ".JPG")
-#         filePath <- file.path("/home/sntech/sandimage/", fileName)
+         filePath <- file.path("/home/sntech/sandimage/", fileName)
 
 #Local testing directory
-         filePath <- file.path("/home/csyms/sandimage/", fileName)
+#         filePath <- file.path("/home/csyms/sandimage/", fileName)
          writeJPEG(imagein, filePath)
         shinyalert("Photo submitted!", type = "success")
 #
