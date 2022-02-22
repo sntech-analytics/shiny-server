@@ -10,8 +10,8 @@ library(shinycssloaders)
 library(shinyWidgets)
 library(data.table)
 library(lubridate)
-library(ggpubr)
-library(plotly)
+#library(ggpubr)
+#library(plotly)
 library(RMariaDB)
 library(RMySQL)
 library(config)
@@ -67,6 +67,27 @@ loadData <- function(table) {
 
   data
 }       
+
+# Backbone to read and restructure data from the database for plotting
+sampquery <- "SELECT ID,Date,Vessel,Haul,Net,LightOnOff,Colour,Flash,Intensity FROM sampleID"
+wtquery <- "SELECT ID,WeightVariable,Weight FROM weightData"
+lenquery <- "SELECT ID,Species,Length,N  FROM lengthData"
+     
+weightfun <- function() {
+    id <- dbGetQuery(con, sampquery)
+    weight <- dbGetQuery(con, wtquery)
+    weight <- merge(id, weight)
+    weight
+    }
+
+lengthfun <- function() {
+    id <- dbGetQuery(con, sampquery)
+    length <- dbGetQuery(con, lenquery)
+    SpeciesLength <- merge(id, length)  
+    SpeciesLength <- setDT(SpeciesLength)[, .SD[rep(.I, N)], .SDcols = !"N"]
+    SpeciesLength
+    }
+
     
 
   datain <- reactive({
@@ -418,8 +439,67 @@ observeEvent(input$checkphoto, {
      dat
 })
 })
+ 
+# This is where the data read-in from the database and the graphing starts
                                    
-                   
+output$spselect  <- renderUI({
+     SpeciesLength <- lengthfun()
+     selectInput("speciesInput", "Species",
+                sort(unique(SpeciesLength$Species)))   
+
+  })
+
+output$spfreqplot <- renderPlot({
+    SpeciesLength <- lengthfun()
+    SpeciesLength$Flash <- factor(SpeciesLength$Flash, levels=c("Constant", "32Hz", "8Hz", "2Hz"))
+    SpeciesLength$Colour[SpeciesLength$Colour == "Blue"] <- "XXX"
+    datasub <- subset(SpeciesLength, SpeciesLength$Species == input$speciesInput)
+
+   a <- ggplot(data=datasub, aes(x=Length)) +
+   theme_classic() +
+   geom_histogram(fill='grey', binwidth=1) +
+   geom_density(aes(y=..count..)) +
+##   scale_y_continuous(limits=c(0,17)) +
+##   scale_x_continuous(limits=c(0,45)) +
+   ylab("Count") +
+   theme(axis.text = element_text(size=12, face="bold"),
+         axis.title.x = element_blank(),
+         axis.title.y = element_text(size=14, face="bold")) +
+   theme(strip.text.x = element_text(size=14, face="bold"),
+         strip.text.y = element_text(size=12, face="bold"),
+         strip.background = element_blank()) +
+#        facet_wrap(~LightOnOff*Flash)
+          facet_grid(cols=vars(Flash), rows=vars(LightOnOff))
+ #         facet_grid(cols=vars(LightOnOff), rows=vars(Flash))
+   a
+
+})
+
+output$sampwtplot <- renderPlot({
+      weight <- weightfun()
+      weight$Flash <- factor(weight$Flash, levels=c("Constant", "32Hz", "8Hz", "2Hz"))
+      a <- ggplot(data=weight, aes(y=Weight, x=WeightVariable, fill=LightOnOff)) +
+           theme_classic() +
+           geom_boxplot(outlier.shape = NA) +
+           geom_jitter(position=position_dodge(0.75), size=3) +
+#   geom_jitter(width=0.1) +
+#   scale_y_continuous(limits=c(0,17)) +
+#   scale_x_continuous(limits=c(0,45)) +
+           ylab("Weight (kg)") +
+           theme(plot.title = element_text(size=16, face="bold", hjust=0.5),
+                axis.text = element_text(size=12, face="bold"),
+                axis.title.x = element_blank(),
+                axis.title.y = element_text(size=14, face="bold")) +
+          theme(strip.text.x = element_text(size=14, face="bold"),
+                strip.text.y = element_text(size=12, face="bold"),
+                strip.background = element_blank()) +
+      #    facet_grid(cols=vars(Flash), rows=vars(LightOnOff))
+          facet_wrap(~Flash, ncol=2)
+ #          facet_grid(cols=vars(LightOnOff), rows=vars(Flash))
+
+     a
+     
+})                  
                    
 }   
 

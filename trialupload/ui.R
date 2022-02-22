@@ -10,8 +10,8 @@ library(shinycssloaders)
 library(shinyWidgets)
 library(data.table)
 library(lubridate)
-library(ggpubr)
-library(plotly)
+#library(ggpubr)
+#library(plotly)
 library(RMariaDB)
 library(RMySQL)
 library(config)
@@ -23,8 +23,8 @@ library(base64enc)
 
 
 bullet <- "\U2022"
-observerID <- c("Tom", "Bruce", "Craig", "Kyle")
-vesselID <- c("Virtuous", "GoldenRay", "LeeRose","EilidhAnne")
+observerID <- c("", "Tom", "Bruce", "Craig", "Kyle")
+vesselID <- c("", "Virtuous", "GoldenRay", "LeeRose","EilidhAnne")
 options(shiny.maxRequestSize = 30*1024^2)
 
 sidebar <- dashboardSidebar(
@@ -38,42 +38,44 @@ sidebar <- dashboardSidebar(
              menuItem("Data uploaded to date", tabName = "uploaded", icon = icon("chart-bar")),
              menuItem("Photo upload", tabName = "photo", icon = icon("camera")),
              menuItem("Photos uploaded to date", tabName = "photoload", icon = icon("camera")),
-             menuItem("Preliminary graphs", tabName = "graphics", icon = icon("chart-bar"))
+             menuItem("Size-frequency graphs", tabName = "sizefreqs", icon = icon("chart-bar")),
+             menuItem("Sample weights", tabName = "sampwts", icon = icon("chart-bar"))
              
         )
     )
 
 
-body <-   dashboardBody(
+body <- dashboardBody(
 #    useShinyalert(),
-      tabItems(
+           tabItems(
 
-          tabItem(tabName = "instructions",
-                   fluidRow(
-                    h2("Trials data upload interface", align = "center"),
-                    tags$ul(
-                        tags$h4(paste0(bullet, "  ", 
+             tabItem(tabName = "instructions",
+                     fluidRow(
+                      h2("Trials data upload interface", align = "center"),
+                      tags$ul(
+                          tags$h4(paste0(bullet, "  ", 
                                        "The Data Upload page shows what I had in mind. The sampler has a single Excel or ODS file 
  for each trip. The sheets have a validation on them, and they can't move columns around. The first 12 columns are
 allocated 
 to fixed elements of the data. The Species lengths can be added as required, but the species names will come from 
 a validated dropdown list.")),
-                        tags$h4(paste0(bullet, "  ",
+                          tags$h4(paste0(bullet, "  ",
                                        "When the sampler is happy they have the correct sheet highlighted, they can scan for any 
 errors (I can add further checks), then they click to upload the data.")),
-                        tags$h4(paste0(bullet, "  ",
+                          tags$h4(paste0(bullet, "  ",
                                        "The data enterer cannot overwrite or delete anything in the database. If they 
 screw up, I will fix it.")),
-                        tags$h4(paste0(bullet, "  ",
+                          tags$h4(paste0(bullet, "  ",
                                        "When I link the Upload button to the database, the data are appended to a sandbox
  database on the server")),
-                        tags$h4(paste0(bullet, "  ",
+                          tags$h4(paste0(bullet, "  ",
                                        "The current data upload status can be viewed on the 'Uploaded to date' tab, after I 
 link it all up"))
                     )
                      )
                     
                  ),
+#End tabitem
 
          tabItem(tabName = "upload",
             fluidRow(
@@ -167,18 +169,35 @@ link it all up"))
                     
          )
         ),
-        
-          tabItem(tabName = "graphics",
+  #End tabitem       
+ 
+          tabItem(tabName = "sizefreqs",
                 fluidRow(
-           h2("Graphs: Watch this space", align = "center")
-                    
-         )
-        )       
-                  
-          
-      )    
-          
-      )
+  #         h3("Species frequency plots", align = "center"),
+           uiOutput("spselect"),
+ #          actionButton("updateplot", "Update data set"),
+           box(title="Species size frequencies", width=12, status="primary", height=800,
+               shinycssloaders::withSpinner(
+               plotOutput("spfreqplot", height="700px"))
+               )
+               )
+               ),
+ 
+           tabItem(tabName = "sampwts",
+               fluidRow(
+                 box(title="Sample weights", width=12, status="primary", height=800,
+               shinycssloaders::withSpinner(
+               plotOutput("sampwtplot", height="700px"))
+             ) 
+          #End box
+           )
+           #End Fluidrow                     
+        )
+       #End tabitem 
+              
+      )             
+    )    
+
 
 
 
