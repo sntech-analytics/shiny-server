@@ -40,6 +40,7 @@ poundmonthcumLY <- function(dataset, datacum){
      a <- rangeslider(a)
      a 
  }
+ 
     
  #poundmonth(dealsubwon, "Date", "Sales", 650)
  

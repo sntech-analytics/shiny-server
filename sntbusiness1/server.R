@@ -7,6 +7,7 @@ library(lubridate)
 library(ggplot2)
 library(leaflet)
 library(htmltools)
+library(shinyalert)
 library(shinycssloaders)
 library(ggpubr)
 library(plotly)
@@ -114,6 +115,23 @@ output$lostPipeline <- renderDT({
                                       buttons = c('copy', 'csv', 'excel', 'print')))
                        })
 
+
+#This is the cumulative data subsetting function
+#subcumwon <- reactive({
+#                      subcumwondf <- subset(sumstat, sumstat$WinLoseStatus == "Won" & sumstat$Date >= as.Date(input$subdateRange[1]) & dealsub$Date <= as.Date(input$subdateRange[2]))
+#                      subcumwondf$Cumamount <- cumsum(subcumwondf$Amount)
+#                      subcumwondf
+#                      })
+subwon <- reactive({
+                      subdf <- subset(dealsub, dealsub$WinLoseStatus == "Won" & dealsub$Date >= as.Date(input$subdateRange[1]) & dealsub$Date <= as.Date(input$subdateRange[2]))
+                      subdf
+                      })
+
+subpipe <- reactive({
+                      subdf <- subset(dealsub, dealsub$WinLoseStatus == "Pipeline" & dealsub$Date >= as.Date(input$subdateRangePipe[1]) & dealsub$Date <= as.Date(input$subdateRangePipe[2]))
+                      subdf
+                      })
+
 # Simple stacked plots    
 output$stackSalesLY <- renderPlotly({ 
     poundmonth(dealsubwon, "Date", "Sales", 650)
@@ -148,14 +166,16 @@ output$stackLostCumLY <- renderPlotly({
  output$stackSalesCum2LY <- renderPlotly({ 
     poundmonthcumLY(dealsubwon, sumstatwon)
     })
-
+    
+#  output$substackSalesGGP <- renderPlotly({ 
+#    poundmonthcumLY(subwon(), subcumwon())
+#    })
+    
 
  output$stackSalesGGP <- renderPlot({
-#   poundmonthggp(dealsubwon)
      datasub <- subset(dealsubwon, dealsubwon$Date >= as.Date(input$dateRange[1]) & dealsubwon$Date <= as.Date(input$dateRange[2]))
    a <- ggplot(data=datasub, aes_string(y="amount", x="Date", fill="dealname")) +
     theme_classic() +
-#   ggtitle(title) +
      labs(fill='Deal name') +
      ylab("Amount (GBP)") +
      xlab("") +
@@ -168,7 +188,97 @@ output$stackLostCumLY <- renderPlotly({
       a
     })
  
+# Cumulative SALES... 
+substackplot <- reactive({
+     dfwon <- subwon()
+     sumstat <- aggregate(round(amount, 0) ~ Date, sum, data=dfwon)
+     names(sumstat) <- c('Date', 'Amount') 
+     sumstat <- sumstat[order(sumstat$Date, -sumstat$Amount),]
+     sumstat$Cumamount <- cumsum(sumstat$Amount)
+
+   a <- ggplot() +
+    theme_classic() +
+     labs(fill='Deal name') +
+     ylab("Amount (GBP)") +
+     xlab("") +
+     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+     scale_x_date(date_breaks = "month",
+      labels = label_date_short()) +
+      geom_bar(data=subwon(), aes_string(y="amount", x="Date", fill="dealname"), position="stack", stat="identity") +
+      theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
+           axis.title = element_text(face="bold", size=14),
+           axis.text=element_text(size=10))
+           
+      if (input$cumline) {
+      a <- a + geom_line(data=sumstat, aes_string(y="Cumamount", x="Date")) 
+    }
+       if (input$legendon) {   
+    a <- a + theme(legend.position = "none")
+    }
+      a
+    })
+
+ output$substackSalesGGP <- renderPlot({
+      substackplot()
+    })
  
+  output$downloadPlot <- downloadHandler(
+    filename = function() {
+      paste("salesgraph", format(Sys.time(), "%Y_%m_%d_%H-%M-%S"), ".png", sep="")
+    },
+    content = function(file) {
+      png(file=file, width=12, height=8, units = "in", res=300)
+      plot(substackplot())
+      dev.off()
+      shinyalert("Graph downloaded to your default directory!", type = "success")
+    }
+  )
+
+# CUMULATIVE PIPELINE
+substackplotPipe <- reactive({
+     dfwon <- subpipe()
+     sumstat <- aggregate(round(amount, 0) ~ Date, sum, data=dfwon)
+     names(sumstat) <- c('Date', 'Amount') 
+     sumstat <- sumstat[order(sumstat$Date, -sumstat$Amount),]
+     sumstat$Cumamount <- cumsum(sumstat$Amount)
+
+   a <- ggplot() +
+    theme_classic() +
+     labs(fill='Deal name') +
+     ylab("Amount (GBP)") +
+     xlab("") +
+     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+     scale_x_date(date_breaks = "month",
+      labels = label_date_short()) +
+      geom_bar(data=subpipe(), aes_string(y="amount", x="Date", fill="dealname"), position="stack", stat="identity") +
+      theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
+           axis.title = element_text(face="bold", size=14),
+           axis.text=element_text(size=10))
+           
+      if (input$cumlinePipe) {
+      a <- a + geom_line(data=sumstat, aes_string(y="Cumamount", x="Date")) 
+    }
+       if (input$legendonPipe) {   
+    a <- a + theme(legend.position = "none")
+    }
+      a
+    })
+
+ output$substackPipeGGP <- renderPlot({
+      substackplotPipe()
+    })
+ 
+  output$downloadPlotPipe <- downloadHandler(
+    filename = function() {
+      paste("pipelinegraph", format(Sys.time(), "%Y_%m_%d_%H-%M-%S"), ".png", sep="")
+    },
+    content = function(file) {
+      png(file=file, width=12, height=8, units = "in", res=300)
+      plot(substackplotPipe())
+      dev.off()
+      shinyalert("Graph downloaded to your default directory!", type = "success")
+    }
+  )
      
 output$GanttLY <- renderPlotly({  
 
