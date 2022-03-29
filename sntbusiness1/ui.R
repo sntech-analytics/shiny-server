@@ -25,9 +25,12 @@ sidebar <-   dashboardSidebar(
            menuItem("Sales in pipeline", tabName = "salespipe", icon = icon("dashboard")),
            menuItem("Unsuccessful bids", tabName = "saleslost", icon = icon("dashboard")),
            menuItem("Sales graph", tabName = "wongraphs5", icon = icon("chart-bar")),
+           menuItem("Sales graph Plotly", tabName = "salesly", icon = icon("chart-bar")),
            menuItem("Pipeline graph", tabName = "pipegraphs", icon = icon("chart-bar")),
+           menuItem("Pipeline graph Plotly", tabName = "pipegraphsly", icon = icon("chart-bar")),
            menuItem("Old sales graphs: basic", tabName = "wongraphs", icon = icon("chart-bar")),
            menuItem("Old alternate sales graph", tabName = "wongraphs2", icon = icon("chart-bar")),
+
  #          menuItem("Alternate sales graph (b)", tabName = "wongraphs3", icon = icon("chart-bar")),
  #          menuItem("Alternate sales graph (c)", tabName = "wongraphs4", icon = icon("chart-bar")),
 #           menuItem("Close, but no cigar graphs (Old)", tabName = "lostgraphs", icon = icon("chart-bar")),
@@ -174,7 +177,50 @@ body <-   dashboardBody(
            )
         ),
  
+         tabItem(tabName = "salesly",
+            h2("Successful sales with rollovers: Manually set the time range of the cumulative sales", align = "center"),
+            box(title="Graph options", width=3, status="primary",
+             airDatepickerInput(inputId = 'subdateRangeLY',
+                   label = "Select date range. Click on the start date, then click on the end date",
+                   value = c("2019-10-01", as.character(Sys.Date())),
+                   maxDate = Sys.Date(),
+                   minDate = "2019-10-01",
+                   range=TRUE,
+                   view = "months", #editing what the popup calendar shows when it opens
+                   minView = "months", #making it not possible to go down to a "days" view and pick the wrong date
+                   dateFormat = "mm-yyyy"),
+              checkboxInput("cumlineLY", label = "Display cumulative sum", value = FALSE),
+              checkboxInput("legendonLY", label = "Hide legend", value = FALSE)
+                ),
+            box(title="Sales graph", width=9, status="primary",
+            shinycssloaders::withSpinner(
+              plotlyOutput(outputId="substackSalesGGPLY", width = "90%", height="700px"))
+           )
+        ),
 
+         tabItem(tabName = "pipegraphsly",
+            h2("Pipeline sales with rollovers", align = "center"),
+            box(title="Graph options", width=3, status="primary",
+             airDatepickerInput(inputId = 'subdateRangePipeLY',
+                   label = "Select date range. Click on the start date, then click on the end date",
+                   value = c("2019-10-01", as.character(Sys.Date())),
+                   maxDate = Sys.Date(),
+                   minDate = "2019-10-01",
+                   range=TRUE,
+                   view = "months", #editing what the popup calendar shows when it opens
+                   minView = "months", #making it not possible to go down to a "days" view and pick the wrong date
+                   dateFormat = "mm-yyyy"),
+              checkboxInput("cumlinePipeLY", label = "Display cumulative sum", value = FALSE),
+              checkboxInput("legendonPipeLY", label = "Hide legend", value = FALSE)
+                ),
+            box(title="Pipeline graph", width=9, status="primary",
+            shinycssloaders::withSpinner(
+              plotlyOutput(outputId="substackPipeGGPLY", width = "90%", height="700px"))
+           )
+        ),
+        
+        
+        
          tabItem(tabName = "lostgraphs",
             h2("Unsuccessful bids", align = "center"),
             column(width=2),

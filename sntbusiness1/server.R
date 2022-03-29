@@ -131,6 +131,18 @@ subpipe <- reactive({
                       subdf <- subset(dealsub, dealsub$WinLoseStatus == "Pipeline" & dealsub$Date >= as.Date(input$subdateRangePipe[1]) & dealsub$Date <= as.Date(input$subdateRangePipe[2]))
                       subdf
                       })
+                      
+subwonly <- reactive({
+                      subdf <- subset(dealsub, dealsub$WinLoseStatus == "Won" & dealsub$Date >= as.Date(input$subdateRangeLY[1]) & dealsub$Date <= as.Date(input$subdateRangeLY[2]))
+                      subdf
+                      })
+                      
+
+subpipely <- reactive({
+                      subdf <- subset(dealsub, dealsub$WinLoseStatus == "Pipeline" & dealsub$Date >= as.Date(input$subdateRangePipeLY[1]) & dealsub$Date <= as.Date(input$subdateRangePipeLY[2]))
+                      subdf
+                      })
+                      
 
 # Simple stacked plots    
 output$stackSalesLY <- renderPlotly({ 
@@ -279,6 +291,77 @@ substackplotPipe <- reactive({
       shinyalert("Graph downloaded to your default directory!", type = "success")
     }
   )
+
+# Cumulative SALES PLOTLY... 
+substackplotLY <- reactive({
+     dfwon <- subwonly()
+     sumstat <- aggregate(round(amount, 0) ~ Date, sum, data=dfwon)
+     names(sumstat) <- c('Date', 'Amount') 
+     sumstat <- sumstat[order(sumstat$Date, -sumstat$Amount),]
+     sumstat$Cumamount <- cumsum(sumstat$Amount)
+
+   a <- ggplot() +
+    theme_classic() +
+     labs(fill='Deal name') +
+     ylab("Amount (GBP)") +
+     xlab("") +
+     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+     scale_x_date(date_breaks = "month",
+      labels = label_date_short()) +
+      geom_bar(data=subwonly(), aes_string(y="amount", x="Date", fill="dealname"), position="stack", stat="identity") +
+      theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
+           axis.title = element_text(face="bold", size=14),
+           axis.text=element_text(size=10))
+           
+      if (input$cumlineLY) {
+      a <- a + geom_line(data=sumstat, aes_string(y="Cumamount", x="Date")) 
+    }
+       if (input$legendonLY) {   
+    a <- a + theme(legend.position = "none")
+    }
+      ggplotly(a, height=700)
+    })
+
+ output$substackSalesGGPLY <- renderPlotly({
+      substackplotLY()
+    })
+ 
+
+# CUMULATIVE PIPELINE PLOTLY
+substackplotPipeLY <- reactive({
+     dfwon <- subpipely()
+     sumstat <- aggregate(round(amount, 0) ~ Date, sum, data=dfwon)
+     names(sumstat) <- c('Date', 'Amount') 
+     sumstat <- sumstat[order(sumstat$Date, -sumstat$Amount),]
+     sumstat$Cumamount <- cumsum(sumstat$Amount)
+
+   a <- ggplot() +
+    theme_classic() +
+     labs(fill='Deal name') +
+     ylab("Amount (GBP)") +
+     xlab("") +
+     scale_y_continuous(labels=scales::dollar_format(prefix="£")) +
+     scale_x_date(date_breaks = "month",
+      labels = label_date_short()) +
+      geom_bar(data=subpipely(), aes_string(y="amount", x="Date", fill="dealname"), position="stack", stat="identity") +
+      theme(plot.title = element_text(face="bold", size=16, hjust=0.5),
+           axis.title = element_text(face="bold", size=14),
+           axis.text=element_text(size=10))
+           
+      if (input$cumlinePipeLY) {
+      a <- a + geom_line(data=sumstat, aes_string(y="Cumamount", x="Date")) 
+    }
+       if (input$legendonPipeLY) {   
+    a <- a + theme(legend.position = "none")
+    }
+      ggplotly(a, height=700)
+    })
+
+ output$substackPipeGGPLY <- renderPlotly({
+      substackplotPipeLY()
+    })
+ 
+
      
 output$GanttLY <- renderPlotly({  
 
