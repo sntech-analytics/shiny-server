@@ -142,7 +142,13 @@ subpipely <- reactive({
                       subdf <- subset(dealsub, dealsub$WinLoseStatus == "Pipeline" & dealsub$Date >= as.Date(input$subdateRangePipeLY[1]) & dealsub$Date <= as.Date(input$subdateRangePipeLY[2]))
                       subdf
                       })
-                      
+
+
+subganttly <- reactive({
+#                   subdf <- subset(dealsub, dealsub$WinLoseStatus %in% c("Won", "Pipeline") & dealsub$Date >= as.Date(input$subdateRangeGanttLY[1]) & dealsub$Date <= as.Date(input$subdateRangeGanttLY[2]))
+                      subdf <- subset(dealsub, dealsub$WinLoseStatus %in% c("Won", "Pipeline") & dealsub$Date >= as.Date(input$subdateRangeGanttLY[1]))
+                      subdf
+                      })                     
 
 # Simple stacked plots    
 output$stackSalesLY <- renderPlotly({ 
@@ -365,7 +371,8 @@ substackplotPipeLY <- reactive({
      
 output$GanttLY <- renderPlotly({  
 
-     b <- ggplot(data=rbind(dealsubwon,dealsubpipe), aes(x=trial_start_date, xend=trial_end_date, 
+#     b <- ggplot(data=rbind(dealsubwon,dealsubpipe), aes(x=trial_start_date, xend=trial_end_date, 
+      b <- ggplot(data=subganttly(), aes(x=trial_start_date, xend=trial_end_date, 
                          y=dealname, yend=dealname,
                          color = dealname)) +  
     theme_classic() +

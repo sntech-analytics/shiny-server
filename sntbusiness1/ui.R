@@ -24,12 +24,12 @@ sidebar <-   dashboardSidebar(
            menuItem("Sales won", tabName = "saleswon", icon = icon("dashboard")),
            menuItem("Sales in pipeline", tabName = "salespipe", icon = icon("dashboard")),
            menuItem("Unsuccessful bids", tabName = "saleslost", icon = icon("dashboard")),
-           menuItem("Sales graph", tabName = "wongraphs5", icon = icon("chart-bar")),
-           menuItem("Sales graph Plotly", tabName = "salesly", icon = icon("chart-bar")),
-           menuItem("Pipeline graph", tabName = "pipegraphs", icon = icon("chart-bar")),
-           menuItem("Pipeline graph Plotly", tabName = "pipegraphsly", icon = icon("chart-bar")),
-           menuItem("Old sales graphs: basic", tabName = "wongraphs", icon = icon("chart-bar")),
-           menuItem("Old alternate sales graph", tabName = "wongraphs2", icon = icon("chart-bar")),
+ #          menuItem("Sales graph", tabName = "wongraphs5", icon = icon("chart-bar")),
+           menuItem("Sales graph", tabName = "salesly", icon = icon("chart-bar")),
+#           menuItem("Pipeline graph", tabName = "pipegraphs", icon = icon("chart-bar")),
+           menuItem("Pipeline graph", tabName = "pipegraphsly", icon = icon("chart-bar")),
+ #          menuItem("Old sales graphs: basic", tabName = "wongraphs", icon = icon("chart-bar")),
+ #          menuItem("Old alternate sales graph", tabName = "wongraphs2", icon = icon("chart-bar")),
 
  #          menuItem("Alternate sales graph (b)", tabName = "wongraphs3", icon = icon("chart-bar")),
  #          menuItem("Alternate sales graph (c)", tabName = "wongraphs4", icon = icon("chart-bar")),
@@ -233,14 +233,37 @@ body <-   dashboardBody(
         ),
 
          
-         tabItem(tabName = "timeline",
-           h2("Project timelines (won and pipeline)", align = "center"),
-            column(width=2),
-            column(width=10,
-           shinycssloaders::withSpinner(
-             plotlyOutput(outputId="GanttLY", width = "90%", height="700px"))
-             )
-         ),
+#         tabItem(tabName = "timeline",
+#           h2("Project timelines (won and pipeline)", align = "center"),
+#            column(width=2),
+#            column(width=10,
+#           shinycssloaders::withSpinner(
+#             plotlyOutput(outputId="GanttLY", width = "90%", height="700px"))
+#             )
+#         ),
+ 
+          tabItem(tabName = "timeline",
+            h2("Project timelines (won and pipeline)", align = "center"),
+            box(title="Graph options", width=3, status="primary",
+             airDatepickerInput(inputId = 'subdateRangeGanttLY',
+                   label = "Select start date",
+                   value = c("2019-10-01"),
+ #                  value = c("2019-10-01", as.character(Sys.Date())),
+                   maxDate = Sys.Date(),
+                   minDate = "2019-10-01",
+                   range=FALSE,
+ #                  range=TRUE,
+                   view = "months", #editing what the popup calendar shows when it opens
+                   minView = "months", #making it not possible to go down to a "days" view and pick the wrong date
+                   dateFormat = "mm-yyyy")
+                ),
+            box(title="Project timelines", width=9, status="primary",
+            shinycssloaders::withSpinner(
+              plotlyOutput(outputId="GanttLY", width = "90%", height="700px"))
+           )
+        ),
+ 
+ 
          
          tabItem(tabName = "marketmapLY",
            h2("Potential market map", align = "center"),
