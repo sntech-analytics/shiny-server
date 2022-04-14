@@ -1,7 +1,0 @@
-default:
-    dataconnection:
-        dbname: 'goldenraysand'
-        host: '77.68.125.129'
-        username: 'craig'
-        password: 'jSHa8ssXTNxkV9p'
-
