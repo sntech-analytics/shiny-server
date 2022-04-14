@@ -228,7 +228,7 @@ link it all up"))
 
 
 ui <- dashboardPage(
-  dashboardHeader(title = "SNT trials data upload", titleWidth=300),
+  dashboardHeader(title = "Virtuous data upload", titleWidth=300),
   sidebar,
   body
 )
