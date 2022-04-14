@@ -417,7 +417,7 @@ observeEvent(input$imageupload, {
         imagein <- readJPEG(input$imageup$datapath)
         fileName <- paste0(paste(input$imdate, input$imvessel, "Haul", input$imhaul, input$imside, 
                            input$imlight, input$imloc, timestamp, sep="_"), ".JPG")
-         filePath <- file.path("/home/sntech/virtselectsandimage/", fileName)
+         filePath <- file.path("/home/sntech/goldenraysandimage/", fileName)
 
 #Local testing directory
  #        filePath <- file.path("/home/csyms/sandimage/", fileName)
@@ -431,7 +431,7 @@ observeEvent(input$imageupload, {
                   
  output$photodat <- renderDT({
  #    dat <- system("ls /home/csyms/sandimage/", intern=TRUE)
-    dat <- system("ls /home/sntech/virtselectsandimage/", intern=TRUE)   
+    dat <- system("ls /home/sntech/goldenraysandimage/", intern=TRUE)   
     ident <-  substring(dat, 1, nchar(dat)-4)          
     sub <- substring(dat, 1, nchar(dat)-24) 
     date <- substring(sub, 1, 10)
@@ -458,7 +458,7 @@ observeEvent(input$imageupload, {
 observeEvent(input$checkphoto, {                   
  output$photodat <- renderDT({
   #   dat <- system("ls /home/csyms/sandimage/", intern=TRUE)
-    dat <- system("ls /home/sntech/virtselectsandimage/", intern=TRUE) 
+    dat <- system("ls /home/sntech/goldenraysandimage/", intern=TRUE) 
     ident <-  substring(dat, 1, nchar(dat)-4)          
     sub <- substring(dat, 1, nchar(dat)-24) 
     date <- substring(sub, 1, 10)
