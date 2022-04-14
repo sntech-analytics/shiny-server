@@ -1,0 +1,27 @@
+#body{
+#    background-color: lightblue;
+#    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+#}
+
+.info-box {
+    min-height: 45px;
+}
+
+.info-box-icon {
+    height: 45px;
+    line-height: 45px;
+    font-size: 200%;
+}
+
+.info-box-content {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.datacheck{
+    font-size: 20px;
+}
+
+# .nav-tabs-custom .nav-tabs li.header{
+#     font-size: 40px; 
+#}
