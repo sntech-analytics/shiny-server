@@ -110,9 +110,7 @@ lengthfun <- function() {
 
   })      
 
-#Eventually put all this into a source file
-    
-   
+  
 output$observer <- renderInfoBox({
     req(input$file1)
     infoBox(
