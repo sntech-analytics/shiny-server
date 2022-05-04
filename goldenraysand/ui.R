@@ -34,7 +34,9 @@ sidebar <- dashboardSidebar(
              height="70"),
            sidebarMenu(
              menuItem("Instructions", tabName = "instructions", icon = icon("info-circle")),
-             menuItem("Data upload", tabName = "upload", icon = icon("dashboard")),
+#Icon doesn't exist anymore
+#             menuItem("Data upload", tabName = "upload", icon = icon("dashboard")),
+             menuItem("Data upload", tabName = "upload", icon = icon("info-circle"")),
              menuItem("Data uploaded to date", tabName = "uploaded", icon = icon("chart-bar")),
              menuItem("Photo upload", tabName = "photo", icon = icon("camera")),
              menuItem("Photos uploaded to date", tabName = "photoload", icon = icon("camera")),
