@@ -88,19 +88,45 @@ lengthfun <- function() {
 
     
 
+#  datain <- reactive({
+#    if (!is.null(input$file1)) {        
+#      ext <- tools::file_ext(input$file1)
+#      if (toupper(ext) == 'XLSX') {
+#          df <- data.frame(read_excel(input$file1$datapath, 
+#                        sheet = input$file1sheet))
+##          df$Date <- format(df$Date, format="%d %b %Y") 
+#        return(df)
+#       }
+#        else if (toupper(ext) == 'ODS') {
+#           df <- data.frame(read_ods(input$file1$datapath, 
+#                        sheet = input$file1sheet))
+# #          df$Date <- format(df$Date, format="%d %b %Y") 
+#        return(df)
+#        }  
+#
+#    } else {
+#      return(NULL)
+#    } 
+#
+#  })      
+  
+  
   datain <- reactive({
-    if (!is.null(input$file1)) {        
-      ext <- tools::file_ext(input$file1)
+    if (!is.null(input$file1)) {  
+      inFile <- input$file1      
+      ext <- tools::file_ext(inFile)
+      sheet = input$file1sheet
       if (toupper(ext) == 'XLSX') {
-          df <- data.frame(read_excel(input$file1$datapath, 
-                        sheet = input$file1sheet))
+            file.rename(inFile$datapath, paste(inFile$datapath, ext, sep="."))           
+            df <- data.frame(read_excel(paste(inFile$datapath, ext, sep="."), sheet))
 #          df$Date <- format(df$Date, format="%d %b %Y") 
         return(df)
        }
+       
         else if (toupper(ext) == 'ODS') {
-           df <- data.frame(read_ods(input$file1$datapath, 
-                        sheet = input$file1sheet))
- #          df$Date <- format(df$Date, format="%d %b %Y") 
+            file.rename(inFile$datapath, paste(inFile$datapath, ext, sep="."))           
+            df <- data.frame(read_ods(paste(inFile$datapath, ext, sep="."), sheet))
+#          df$Date <- format(df$Date, format="%d %b %Y") 
         return(df)
         }  
 
@@ -108,7 +134,7 @@ lengthfun <- function() {
       return(NULL)
     } 
 
-  })      
+  })  
 
 #Eventually put all this into a source file
     
