@@ -14,7 +14,7 @@ library(lubridate)
 #library(plotly)
 library(RMariaDB)
 library(RMySQL)
-library(config)
+
 library(pool)
 library(scales)
 library(ssh)
@@ -131,7 +131,7 @@ link it all up"))
                     side="right",
                     # The id lets us use input$tabset1 on the server to find the current tab
                     id = "datatabset", height = "400px",
-                       tabPanel(title="Sample weight", div(tableOutput("weightdat"), class="datacheck")),
+                       tabPanel(title="Haul weight", div(tableOutput("weightdat"), class="datacheck")),
                        tabPanel(title="Fish summary", div(tableOutput("sumdat"), class="datacheck")),
                        tabPanel(title="Fish lengths", div(tableOutput("fishdat"), class="datacheck"))
                        

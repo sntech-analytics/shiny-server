@@ -14,7 +14,7 @@ library(lubridate)
 #library(plotly)
 library(RMariaDB)
 library(RMySQL)
-library(config)
+
 library(pool)
 library(scales)
 library(ssh)
@@ -68,7 +68,7 @@ loadData <- function(table) {
 
 # Backbone to read and restructure data from the database for plotting
 sampquery <- "SELECT ID,Date,Vessel,Haul,Net,LightOnOff,Colour,Flash,Intensity FROM sampleID"
-wtquery <- "SELECT ID,WeightVariable,Weight FROM weightData"
+wtquery <- "SELECT ID,WeightVariable,Weight,SampleWeight FROM weightData"
 lenquery <- "SELECT ID,Species,Length,N  FROM lengthData"
      
 weightfun <- function() {
@@ -224,14 +224,14 @@ output$imageloc <- renderInfoBox({
     
 output$weightdat <- renderTable({
                       req(input$file1)
-                      weightdat <- datain()[,6:7]
-                      names(weightdat) <- c('Category', 'Weight')
-                      weightdat <- weightdat[complete.cases(weightdat),]
-                      weightdat$Percent <- weightdat$Weight*100/sum(weightdat$Weight)
-                      testsum <- data.frame(unlist(t(colSums(weightdat[c('Weight', 'Percent')]))))
-                      testsum$Category <- "TOTAL"
-                      weightdat$Percent <- round(weightdat$Percent, 2)
-                      weightdat <- rbind(weightdat, testsum)                                           
+                      weightdat <- datain()[,6:8]
+                      names(weightdat) <- c('Category', 'Weight', 'SampleWeight')
+#                      weightdat <- weightdat[complete.cases(weightdat),]
+#                      weightdat$Percent <- weightdat$Weight*100/sum(weightdat$Weight)
+ #                     testsum <- data.frame(unlist(t(colSums(weightdat[c('Weight', 'Percent')]))))
+ #                    testsum$Category <- "TOTAL"
+ #                     weightdat$Percent <- round(weightdat$Percent, 2)
+ #                     weightdat <- rbind(weightdat, testsum)                                           
                       weightdat
                       },
                       na = "")
@@ -239,7 +239,7 @@ output$weightdat <- renderTable({
 
 output$fishdat <- renderTable({
                       req(input$file1)
-                      fishdat <- datain()[,8:ncol(datain())]
+                      fishdat <- datain()[,9:ncol(datain())]
                       fishdat <- fishdat[rowSums(is.na(fishdat)) != ncol(fishdat), ]
                       fishdat
                       },
@@ -247,7 +247,7 @@ output$fishdat <- renderTable({
    
 output$sumdat <- renderTable({
     req(input$file1)
-    dt1 <- setDT(datain()[,8:ncol(datain())])
+    dt1 <- setDT(datain()[,9:ncol(datain())])
     dt1 <- melt(dt1)
     dt1 <- na.omit(dt1)
     names(dt1) <- c("Species", "value")
@@ -297,7 +297,7 @@ observeEvent(input$upload, {
 
 ##Consolidate Species length data 
 
-    dt1 <- setDT(datain()[,8:ncol(datain())])
+    dt1 <- setDT(datain()[,9:ncol(datain())])
     dt1 <- melt(dt1)
     dt1 <- na.omit(dt1)
     names(dt1) <- c("Species", "Length")
@@ -311,9 +311,9 @@ observeEvent(input$upload, {
 
 ##Consolidate weight data 
 
-    weightdat <- datain()[ ,6:7]
-    names(weightdat) <- c('WeightVariable', 'Weight')
-    weightdat <- weightdat[complete.cases(weightdat),]
+    weightdat <- datain()[ ,6:8]
+    names(weightdat) <- c('WeightVariable', 'Weight', 'SampleWeight')
+#    weightdat <- weightdat[complete.cases(weightdat),]
     weightdat$ID <- metadat[1,'ID']
     weightdat$timestamp <- timestamp 
 
@@ -517,31 +517,31 @@ output$spfreqplot <- renderPlot({
 
 })
 
-output$sampwtplot <- renderPlot({
-      weight <- weightfun()
-      weight$Flash <- factor(weight$Flash, levels=c("Constant", "32Hz", "8Hz", "2Hz"))
-      a <- ggplot(data=weight, aes(y=Weight, x=WeightVariable, fill=LightOnOff)) +
-           theme_classic() +
-           geom_boxplot(outlier.shape = NA) +
-           geom_jitter(position=position_dodge(0.75), size=3) +
-#   geom_jitter(width=0.1) +
-#   scale_y_continuous(limits=c(0,17)) +
-#   scale_x_continuous(limits=c(0,45)) +
-           ylab("Weight (kg)") +
-           theme(plot.title = element_text(size=16, face="bold", hjust=0.5),
-                axis.text = element_text(size=12, face="bold"),
-                axis.title.x = element_blank(),
-                axis.title.y = element_text(size=14, face="bold")) +
-          theme(strip.text.x = element_text(size=14, face="bold"),
-                strip.text.y = element_text(size=12, face="bold"),
-                strip.background = element_blank()) +
-      #    facet_grid(cols=vars(Flash), rows=vars(LightOnOff))
-          facet_wrap(~Flash, ncol=2)
- #          facet_grid(cols=vars(LightOnOff), rows=vars(Flash))
-
-     a
-     
-})                  
+#output$sampwtplot <- renderPlot({
+#      weight <- weightfun()
+#      weight$Flash <- factor(weight$Flash, levels=c("Constant", "32Hz", "8Hz", "2Hz"))
+#      a <- ggplot(data=weight, aes(y=Weight, x=WeightVariable, fill=LightOnOff)) +
+#           theme_classic() +
+#           geom_boxplot(outlier.shape = NA) +
+#           geom_jitter(position=position_dodge(0.75), size=3) +
+##   geom_jitter(width=0.1) +
+##   scale_y_continuous(limits=c(0,17)) +
+##   scale_x_continuous(limits=c(0,45)) +
+#           ylab("Weight (kg)") +
+#           theme(plot.title = element_text(size=16, face="bold", hjust=0.5),
+#                axis.text = element_text(size=12, face="bold"),
+#                axis.title.x = element_blank(),
+#                axis.title.y = element_text(size=14, face="bold")) +
+#          theme(strip.text.x = element_text(size=14, face="bold"),
+#                strip.text.y = element_text(size=12, face="bold"),
+#                strip.background = element_blank()) +
+#      #    facet_grid(cols=vars(Flash), rows=vars(LightOnOff))
+#          facet_wrap(~Flash, ncol=2)
+# #          facet_grid(cols=vars(LightOnOff), rows=vars(Flash))
+#
+#     a
+#     
+#})                  
                    
 }   
 
