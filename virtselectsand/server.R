@@ -110,29 +110,16 @@ lengthfun <- function() {
 #
 #  })      
   
-  
   datain <- reactive({
-    if (!is.null(input$file1)) {  
-      inFile <- input$file1      
-      ext <- tools::file_ext(inFile)
-      sheet = input$file1sheet
-      if (toupper(ext) == 'XLSX') {
-            file.rename(inFile$datapath, paste(inFile$datapath, ext, sep="."))           
-            df <- data.frame(read_excel(paste(inFile$datapath, ext, sep="."), sheet))
-#          df$Date <- format(df$Date, format="%d %b %Y") 
+            inFile <- input$file1
+            
+            if(is.null(inFile))
+                return(NULL)
+            ext <- tools::file_ext(inFile$name)
+            file.rename(inFile$datapath,
+               paste(inFile$datapath, ext, sep="."))
+            df <- read_excel(paste(inFile$datapath, ext, sep="."), input$file1sheet) 
         return(df)
-       }
-       
-        else if (toupper(ext) == 'ODS') {
-            file.rename(inFile$datapath, paste(inFile$datapath, ext, sep="."))           
-            df <- data.frame(read_ods(paste(inFile$datapath, ext, sep="."), sheet))
-#          df$Date <- format(df$Date, format="%d %b %Y") 
-        return(df)
-        }  
-
-    } else {
-      return(NULL)
-    } 
 
   })  
 
