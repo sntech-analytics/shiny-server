@@ -95,7 +95,7 @@ lengthfun <- function() {
                 return(NULL)
             ext <- tools::file_ext(inFile$name)
             file.rename(inFile$datapath, paste(inFile$datapath, ext, sep="."))
-            df <- read_excel(paste(inFile$datapath, ext, sep="."), input$file1sheet) 
+            df <- as.data.frame(read_excel(paste(inFile$datapath, ext, sep="."), input$file1sheet))
         return(df)
 
   })      
