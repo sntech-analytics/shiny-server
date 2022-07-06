@@ -111,14 +111,12 @@ lengthfun <- function() {
 #  })      
   
   datain <- reactive({
-            inFile <- input$file1
-            
+            inFile <- input$file1           
             if(is.null(inFile))
                 return(NULL)
             ext <- tools::file_ext(inFile$name)
-            file.rename(inFile$datapath,
-               paste(inFile$datapath, ext, sep="."))
-            df <- read_excel(paste(inFile$datapath, ext, sep="."), input$file1sheet) 
+            file.rename(inFile$datapath, paste(inFile$datapath, ext, sep="."))
+            df <- as.data.frame(read_excel(paste(inFile$datapath, ext, sep="."), input$file1sheet))
         return(df)
 
   })  
