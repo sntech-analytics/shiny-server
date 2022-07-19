@@ -139,7 +139,7 @@ output$timein <- renderInfoBox({
 output$timeout <- renderInfoBox({
     req(input$file1)
     infoBox(
-    "Time out", format(datain()[1,6], format="%H:%M:%S"), icon = icon("clock")
+    "Time out", format(datain()[4,3], format="%H:%M:%S"), icon = icon("clock")
        
         )
     })
@@ -288,7 +288,7 @@ observeEvent(input$upload, {
                      format(datain()[1,2], format="%Y-%m-%d"),
                      format(datain()[1,2], format="%Y-%m-%d"),
                      format(datain()[1,3], format="%X"),
-                     format(datain()[1,6], format="%X"),
+                     format(datain()[4,3], format="%X"),
                      datain()[1,4],
                      datain()[4,4],
                      datain()[7,4],
