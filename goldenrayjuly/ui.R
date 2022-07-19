@@ -23,7 +23,7 @@ library(base64enc)
 
 
 bullet <- "\U2022"
-observerID <- c("", "Tom", "Bruce", "Craig", "Kyle")
+observerID <- c("", "Henry", "Tom", "Bruce", "Craig")
 vesselID <- c("", "Virtuous", "GoldenRay", "LeeRose","EilidhAnne")
 options(shiny.maxRequestSize = 30*1024^2)
 
@@ -106,10 +106,12 @@ link it all up"))
                    box(width=12, infoBoxOutput("observer"),
                    infoBoxOutput("vessel"),
                    infoBoxOutput("date"),
-                   infoBoxOutput("time"),
+                   infoBoxOutput("timein"),
+                   infoBoxOutput("timeout"),
                    infoBoxOutput("haul"),
                    infoBoxOutput("side"),
                    infoBoxOutput("bulk"),
+                   infoBoxOutput("rf"),
                    infoBoxOutput("treatment"),
                    infoBoxOutput("notes")
                       )                                         
@@ -163,7 +165,7 @@ link it all up"))
                        selectInput("imlight", "Light on or off", choices = c("", "Off", "On"),
                                    selectize = TRUE), 
                        selectInput("imloc", "Photo location (only 1 of each)", 
-                                   choices = c("", "Hopper", "Sample", "Net"), selectize = TRUE)
+                                   choices = c("","Sample", "FishOnly", "Hopper", "Net"), selectize = TRUE)
                        ),
 
                     box(title="Image preview", width=4, status="primary",

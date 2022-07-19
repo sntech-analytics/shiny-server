@@ -116,6 +116,9 @@ output$vessel <- renderInfoBox({
 
         )
     })
+
+
+
     
 output$date <- renderInfoBox({
     req(input$file1)
@@ -125,10 +128,18 @@ output$date <- renderInfoBox({
         )
     })
 
-output$time <- renderInfoBox({
+output$timein <- renderInfoBox({
     req(input$file1)
     infoBox(
-    "Time", format(datain()[1,3], format="%H:%M:%S"), icon = icon("clock")
+    "Time in", format(datain()[1,3], format="%H:%M:%S"), icon = icon("clock")
+       
+        )
+    })
+
+output$timeout <- renderInfoBox({
+    req(input$file1)
+    infoBox(
+    "Time out", format(datain()[1,6], format="%H:%M:%S"), icon = icon("clock")
        
         )
     })
@@ -155,6 +166,14 @@ output$bulk <- renderInfoBox({
     "Bulk estimate", datain()[13,4], icon = icon("dumbbell")
         )
     })  
+    
+output$rf <- renderInfoBox({
+    req(input$file1)
+    infoBox(
+    "Raising factor", datain()[16,4], icon = icon("wifi")
+       
+        )
+    })
 
 output$treatment <- renderInfoBox({
     req(input$file1)
@@ -263,19 +282,22 @@ observeEvent(input$upload, {
                      datain()[7,1],
                      datain()[10,1],
                      datain()[13,1],
+                     data.frame(as.numeric(datain()[16,4])),
                      data.frame(as.numeric(datain()[16,1])),
                      datain()[19,1],
                      format(datain()[1,2], format="%Y-%m-%d"),
                      format(datain()[1,2], format="%Y-%m-%d"),
                      format(datain()[1,3], format="%X"),
+                     format(datain()[1,6], format="%X"),
                      datain()[1,4],
                      datain()[4,4],
                      datain()[7,4],
                      datain()[10,4],
+                     
                      datain()[1,5]))
 
-     names(metadat) <- c("Observer", "Vessel", "Gear", "Position", "Sample_type", "Haul", "Net", 
-                   "Date", "YearMonthDay", "Time", "LightOnOff", "Colour", "Flash", "Intensity", "Notes")
+     names(metadat) <- c("Observer", "Vessel", "Gear", "Position", "Sample_type","RaiseFactor", "Haul", "Net", 
+                   "Date", "YearMonthDay", "TimeIn", "TimeOut", "LightOnOff", "Colour", "Flash", "Intensity", "Notes")
    
     
     cols <- c("Observer", "Vessel", "YearMonthDay", "Haul", "Net", 
