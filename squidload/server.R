@@ -617,10 +617,12 @@ output$squidplot <- renderPlot({
     squid$Flash <- factor(squid$Flash, levels=c("Constant", "32Hz", "8Hz", "2Hz"))
     squid$Colour[squid$Colour == "Blue"] <- "XXX"
 
-   a <- ggplot(data=squid, aes(x=SizeClass, y=SquidWt)) +
+   a <- ggplot(data=squid, aes(x=as.factor(SizeClass), y=SquidWt)) +
    theme_classic() +
-   geom_bar(fill='grey', stat="identity") +
-##   scale_y_continuous(limits=c(0,17)) +
+#   geom_bar(fill='grey', stat="identity") +
+    geom_boxplot(outlier.shape=NA) +
+    geom_jitter(size=2, width=0.2) +
+ ##   scale_y_continuous(limits=c(0,17)) +
 ##   scale_x_continuous(limits=c(0,45)) +
    ylab("Weight") +
    xlab("Size class") +
