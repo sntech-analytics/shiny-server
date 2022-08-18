@@ -248,7 +248,7 @@ link it all up"))
 
 
 ui <- dashboardPage(
-  dashboardHeader(title = "Golden Ray data upload", titleWidth=300),
+  dashboardHeader(title = "Squid data upload", titleWidth=300),
   sidebar,
   body
 )
