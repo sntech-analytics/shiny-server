@@ -110,7 +110,7 @@ link it all up"))
                    infoBoxOutput("timein"),
  #                  infoBoxOutput("timeout"),
                    infoBoxOutput("haul"),
-                   infoBoxOutput("side"),
+ #                  infoBoxOutput("side"),
                    infoBoxOutput("bulk"),
  #                  infoBoxOutput("rf"),
                    infoBoxOutput("treatment"),
@@ -152,6 +152,22 @@ link it all up"))
                     
          )
         ),
+
+          tabItem(tabName = "squidsize",
+                fluidRow(
+  #         h3("Squid weight categories", align = "center"),
+ #          actionButton("updateplot", "Update data set"),
+           box(title="Squid weights per size class", width=12, status="primary", height=800,
+               shinycssloaders::withSpinner(
+               plotOutput("squidplot", height="700px"))
+               )
+               )
+               ),
+
+
+
+
+
 
 # Need to add a whole pile of options here          
          tabItem(tabName = "photo",
@@ -198,19 +214,6 @@ link it all up"))
          )
         ),
   #End tabitem       
-
-          tabItem(tabName = "squidsize",
-                fluidRow(
-  #         h3("Squid weight categories", align = "center"),
-           uiOutput("spselect"),
- #          actionButton("updateplot", "Update data set"),
-           box(title="Squid weights per size class", width=12, status="primary", height=800,
-               shinycssloaders::withSpinner(
-               plotOutput("squidplot", height="700px"))
-               )
-               )
-               ),
-
  
           tabItem(tabName = "sizefreqs",
                 fluidRow(
@@ -245,7 +248,7 @@ link it all up"))
 
 
 ui <- dashboardPage(
-  dashboardHeader(title = "Squid data upload", titleWidth=300),
+  dashboardHeader(title = "Golden Ray data upload", titleWidth=300),
   sidebar,
   body
 )
