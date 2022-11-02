@@ -498,7 +498,7 @@ observeEvent(input$imageupload, {
                   
  output$photodat <- renderDT({
  #    dat <- system("ls /home/csyms/sandimage/", intern=TRUE)
-    dat <- system("ls /home/sntech/goldenraysandimage/", intern=TRUE)   
+    dat <- system("ls /home/sntech/squidbruceimage/", intern=TRUE)   
     ident <-  substring(dat, 1, nchar(dat)-4)          
     sub <- substring(dat, 1, nchar(dat)-24) 
     date <- substring(sub, 1, 10)
@@ -525,7 +525,7 @@ observeEvent(input$imageupload, {
 observeEvent(input$checkphoto, {                   
  output$photodat <- renderDT({
   #   dat <- system("ls /home/csyms/sandimage/", intern=TRUE)
-    dat <- system("ls /home/sntech/goldenraysandimage/", intern=TRUE) 
+    dat <- system("ls /home/sntech/squidbruceimage/", intern=TRUE) 
     ident <-  substring(dat, 1, nchar(dat)-4)          
     sub <- substring(dat, 1, nchar(dat)-24) 
     date <- substring(sub, 1, 10)
@@ -561,7 +561,7 @@ output$spselect  <- renderUI({
 output$spfreqplot <- renderPlot({
     SpeciesLength <- lengthfun()
     SpeciesLength$Flash <- factor(SpeciesLength$Flash, levels=c("Constant", "32Hz", "8Hz", "2Hz"))
-    SpeciesLength$Colour[SpeciesLength$Colour == "Blue"] <- "XXX"
+ #   SpeciesLength$Colour[SpeciesLength$Colour == "Blue"] <- "XXX"
     datasub <- subset(SpeciesLength, SpeciesLength$Species == input$speciesInput)
 
    a <- ggplot(data=datasub, aes(x=Length)) +
