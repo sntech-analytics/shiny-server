@@ -280,10 +280,10 @@ output$squidcheck <- renderTable({
                       squidcheck <- data.frame(
                                       rbind(
                                       cbind(1, datain()[17,4]),
-                                      cbind(2, datain()[20,4]),
-                                      cbind(3, datain()[23,4]),
-                                      cbind(4, datain()[26,4]),
-                                      cbind(5, datain()[29,4])                                      
+                                      cbind(2, datain()[19,4]),
+                                      cbind(3, datain()[21,4]),
+                                      cbind(4, datain()[23,4]),
+                                      cbind(5, datain()[25,4])                                      
                                            )
                                            )
                       names(squidcheck) <- c('SizeClass', 'SquidWt')
@@ -364,10 +364,10 @@ observeEvent(input$upload, {
     squidat <- data.frame(
                rbind(
                cbind(1, datain()[17,4]),
-               cbind(2, datain()[20,4]),
-               cbind(3, datain()[23,4]),
-               cbind(4, datain()[26,4]),
-               cbind(5, datain()[29,4])
+               cbind(2, datain()[19,4]),
+               cbind(3, datain()[21,4]),
+               cbind(4, datain()[23,4]),
+               cbind(5, datain()[25,4])
                )
                )
      names(squidat) <- c('SizeClass', 'SquidWt')
