@@ -135,9 +135,9 @@ output$date <- renderInfoBox({
 output$timein <- renderInfoBox({
     req(input$file1)
     infoBox(
-    "Time in", format(datain()[1,3], format="%H:%M:%S"), icon = icon("clock")
+#    "Time in", format(datain()[1,3], format="%H:%M:%S"), icon = icon("clock")
 #    "Time in", chron::times(datain()[1,3]), icon = icon("clock")
-#     "Time in", structure(as.integer(as.numeric(datain()[1,3])*60*60*24), class="ITime"), icon = icon("clock")      
+     "Time in", structure(as.integer(as.numeric(datain()[1,3])*60*60*24), class="ITime"), icon = icon("clock")      
         )
     })
 
