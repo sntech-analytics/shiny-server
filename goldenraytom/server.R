@@ -456,7 +456,7 @@ observeEvent(input$imageupload, {
                   
  output$photodat <- renderDT({
  #    dat <- system("ls /home/csyms/sandimage/", intern=TRUE)
-    dat <- system("ls /home/sntech/goldenraysandimage/", intern=TRUE)   
+    dat <- system("ls /home/sntech/goldenraytomimage/", intern=TRUE)   
     ident <-  substring(dat, 1, nchar(dat)-4)          
     sub <- substring(dat, 1, nchar(dat)-24) 
     date <- substring(sub, 1, 10)
