@@ -317,11 +317,9 @@ observeEvent(input$upload, {
                      
                      datain()[1,5]))
 
-     names(metadat) <- c("Observer", "Vessel", "Gear", "Position", "Sample_type", "Haul", "Net", 
-                   "Date", "YearMonthDay", "Time", "LightOnOff", "Colour", "Flash", "Intensity", "Notes")
 
-#     names(metadat) <- c("Observer", "Vessel", "Gear", "Position", "Sample_type","RaiseFactor", "Haul", "Net", 
-#                   "Date", "YearMonthDay", "TimeIn", "TimeOut", "LightOnOff", "Colour", "Flash", "Intensity", "Notes")
+     names(metadat) <- c("Observer", "Vessel", "Gear", "Position", "Sample_type","RaiseFactor", "Haul", "Net", 
+                   "Date", "YearMonthDay", "TimeIn", "TimeOut", "LightOnOff", "Colour", "Flash", "Intensity", "Notes")
    
     
     cols <- c("Observer", "Vessel", "YearMonthDay", "Haul", "Net", 
