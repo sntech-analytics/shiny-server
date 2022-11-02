@@ -442,7 +442,7 @@ observeEvent(input$imageupload, {
         imagein <- readJPEG(input$imageup$datapath)
         fileName <- paste0(paste(input$imdate, input$imvessel, "Haul", input$imhaul, input$imside, 
                            input$imlight, input$imloc, timestamp, sep="_"), ".JPG")
-         filePath <- file.path("/home/sntech/goldenraysandimage/", fileName)
+         filePath <- file.path("/home/sntech/goldenraytomimage/", fileName)
 
 #Local testing directory
  #        filePath <- file.path("/home/csyms/sandimage/", fileName)
@@ -519,7 +519,7 @@ output$spselect  <- renderUI({
 output$spfreqplot <- renderPlot({
     SpeciesLength <- lengthfun()
     SpeciesLength$Flash <- factor(SpeciesLength$Flash, levels=c("Constant", "32Hz", "8Hz", "2Hz"))
-    SpeciesLength$Colour[SpeciesLength$Colour == "Blue"] <- "XXX"
+ #   SpeciesLength$Colour[SpeciesLength$Colour == "Blue"] <- "XXX"
     datasub <- subset(SpeciesLength, SpeciesLength$Species == input$speciesInput)
 
    a <- ggplot(data=datasub, aes(x=Length)) +
