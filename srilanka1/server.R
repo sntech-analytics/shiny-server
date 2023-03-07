@@ -39,10 +39,19 @@ server <- function(input, output) {
         preddf <- predactive()
         pointdf <- points()
         basemap <- leaflet()
-#        basemap <- addProviderTiles(basemap, providers$Esri.OceanBasemap,
-#                            options = providerTileOptions(minZoom=4, maxZoom=13),
-#                            setView(5.5, 77, zoom = 4))
-        basemap <- addRasterImage(basemap, preddf, colors = rev(heat.colors(15)), opacity = 1)
+ #       basemap <- addProviderTiles(basemap, providers$Esri.OceanBasemap,
+ #                           options = providerTileOptions(minZoom=4, maxZoom=13),
+ #                           setView(5.5, 77, zoom = 4))
+   #     basemap <- addTiles(basemap)
+  #      basemap <- addProviderTiles(basemap, providers$Esri.OceanBasemap,
+         basemap <- addProviderTiles(basemap, providers$Esri.WorldImagery,
+  #       basemap <- addProviderTiles(basemap, providers$Esri.WorldPhysical,
+ #        basemap <- addProviderTiles(basemap, providers$Esri.NatGeoWorldMap,
+                  options = providerTileOptions(minZoom=4, maxZoom=18, noWrap = FALSE))
+#                  options = providerTileOptions(maxNativeZoom=19, maxZoom=100, noWrap = TRUE))                  
+                  
+                  
+        basemap <- addRasterImage(basemap, preddf, colors = rev(heat.colors(15)), opacity = .5)
         basemap <- addCircles(basemap, data=pointdf,
                       radius = ~(weekmedwt**10),
                       color = 'black',
@@ -54,6 +63,7 @@ server <- function(input, output) {
     })
     
     }
+
 
 
 
