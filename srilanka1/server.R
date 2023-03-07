@@ -47,7 +47,7 @@ server <- function(input, output) {
          basemap <- addProviderTiles(basemap, providers$Esri.WorldImagery,
   #       basemap <- addProviderTiles(basemap, providers$Esri.WorldPhysical,
  #        basemap <- addProviderTiles(basemap, providers$Esri.NatGeoWorldMap,
-                  options = providerTileOptions(minZoom=4, maxZoom=18, noWrap = FALSE))
+                  options = providerTileOptions(minZoom=1, maxZoom=18, noWrap = FALSE))
 #                  options = providerTileOptions(maxNativeZoom=19, maxZoom=100, noWrap = TRUE))                  
                   
                   
