@@ -22,6 +22,8 @@ server <- function(input, output) {
     load("preds.RDS")
     load("bigsail.RDS")
 
+
+
     predactive <- reactive({
         df <- subset(bigsail, Species == input$Species & Gear == input$Gear & week==input$animation)
         r <- rasterFromXYZ(cbind(df$lon, df$lat, df$weekmed))
@@ -34,16 +36,29 @@ server <- function(input, output) {
         df <- st_as_sf(df, coords = c("lon", "lat"), crs = 4326)
         df
     })
+ 
+    cont <- reactive({
+        df <- subset(bigsail, Species == input$Species & Gear == input$Gear & week==input$animation)
+        quant <- quantile(df$weekmed, probs = c(0.75, 0.95))
+        r <- rasterFromXYZ(cbind(df$lon, df$lat, df$weekmed))
+        r <- rasterToContour(r, levels=c(quant))
+        crs(r) <- CRS('+init=EPSG:4326')
+     #   df <- st_as_sf(r, coords = c("lon", "lat"), crs = 4326)
+        r
+    })
     
+   
     output$map <- renderLeaflet({
         preddf <- predactive()
         pointdf <- points()
+        cont <- cont()
         basemap <- leaflet()
  #       basemap <- addProviderTiles(basemap, providers$Esri.OceanBasemap,
  #                           options = providerTileOptions(minZoom=4, maxZoom=13),
  #                           setView(5.5, 77, zoom = 4))
    #     basemap <- addTiles(basemap)
-  #      basemap <- addProviderTiles(basemap, providers$Esri.OceanBasemap,
+  #         basemap <- addProviderTiles(basemap, providers$USGS.USImagery)
+#        basemap <- addProviderTiles(basemap, providers$Esri.OceanBasemap,
          basemap <- addProviderTiles(basemap, providers$Esri.WorldImagery,
   #       basemap <- addProviderTiles(basemap, providers$Esri.WorldPhysical,
  #        basemap <- addProviderTiles(basemap, providers$Esri.NatGeoWorldMap,
@@ -58,6 +73,10 @@ server <- function(input, output) {
                       fillColor = "black",
                       fillOpacity = 0.6,
                       popup = ~as.character(round(weekmedwt**10, 0)))
+                      
+        basemap <- addPolylines(basemap, data=cont,
+                                color="black",
+                                weight=2)
         basemap
 
     })
